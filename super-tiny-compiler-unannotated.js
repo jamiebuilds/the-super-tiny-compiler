@@ -1,6 +1,9 @@
 function tokenizer(input) {
   var current = 0;
   var tokens = [];
+  var WHITESPACE = /\s/;
+  var NUMBERS = /[0-9]/;
+  var LETTERS = /[a-zA-Z]/;
 
   while (current < input.length) {
     var char = input[current];
@@ -23,13 +26,11 @@ function tokenizer(input) {
       continue;
     }
 
-    var WHITESPACE = /\s/;
     if (WHITESPACE.test(char)) {
       current++;
       continue;
     }
 
-    var NUMBERS = /[0-9]/;
     if (NUMBERS.test(char)) {
       var value = '';
 
@@ -46,7 +47,6 @@ function tokenizer(input) {
       continue;
     }
 
-    var LETTERS = /[a-zA-Z]/;
     if (LETTERS.test(char)) {
       var value = '';
 
