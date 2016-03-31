@@ -348,6 +348,11 @@ function tokenizer(input) {
   // And a `tokens` array for pushing our tokens to.
   var tokens = [];
 
+  // Regex tests for later
+  var WHITESPACE = /\s/;
+  var NUMBERS = /[0-9]/;
+  var LETTERS = /[a-zA-Z]/;
+
   // We start by creating a `while` loop where we are setting up our `current`
   // variable to be incremented as much as we want `inside` the loop.
   //
@@ -398,7 +403,6 @@ function tokenizer(input) {
     //
     // So here we're just going to test for existence and if it does exist we're
     // going to just `continue` on.
-    var WHITESPACE = /\s/;
     if (WHITESPACE.test(char)) {
       current++;
       continue;
@@ -413,7 +417,6 @@ function tokenizer(input) {
     //        Only two separate tokens
     //
     // So we start this off when we encounter the first number in a sequence.
-    var NUMBERS = /[0-9]/;
     if (NUMBERS.test(char)) {
 
       // We're going to create a `value` string that we are going to push
@@ -446,7 +449,6 @@ function tokenizer(input) {
     //    ^^^
     //    Name token
     //
-    var LETTERS = /[a-zA-Z]/;
     if (LETTERS.test(char)) {
       var value = '';
 
