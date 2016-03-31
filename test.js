@@ -75,7 +75,7 @@ var newAst = {
   }]
 };
 
-assert.deepStrictEqual(tokenizer(input), tokens, 'Tokeizer should turn `input` string into `tokens` array');
+assert.deepStrictEqual(tokenizer(input), tokens, 'Tokenizer should turn `input` string into `tokens` array');
 assert.deepStrictEqual(parser(tokens), ast, 'Parser should turn `tokens` array into `ast`');
 assert.deepStrictEqual(transformer(ast), newAst, 'Transformer should turn `ast` into a `newAst`');
 assert.deepStrictEqual(codeGenerator(newAst), output, 'Code Generator should turn `newAst` into `output` string');
