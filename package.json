@@ -1,0 +1,19 @@
+{
+  "name": "the-super-tiny-compiler",
+  "description": "Possibly the smallest compiler ever",
+  "scripts": {
+    "test": "node ./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thejameskyle/the-super-tiny-compiler.git"
+  },
+  "license": "SEE LICENSE IN ./LICENSE",
+  "bugs": {
+    "url": "https://github.com/thejameskyle/the-super-tiny-compiler/issues"
+  },
+  "homepage": "https://github.com/thejameskyle/the-super-tiny-compiler#readme",
+  "dependencies": {
+    "meow": "^3.7.0"
+  }
+}
