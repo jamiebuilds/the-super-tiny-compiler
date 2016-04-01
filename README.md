@@ -10,8 +10,6 @@ work from end to end.
 
 ### [Want to jump into the code? Click here](super-tiny-compiler.js)
 
-[(Or if you would prefer to read it without annotations, click here.)](super-tiny-compiler-unannotated.js)
-
 ---
 
 ### Why should I care?
