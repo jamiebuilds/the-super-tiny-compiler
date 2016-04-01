@@ -41,6 +41,10 @@ watch/star this repo or follow me on
 
 Run with `node test.js`
 
+### Ports
+
+ * [PHP version](https://github.com/BafS/the-super-tiny-compiler-php)
+
 ---
 
 [![cc-by-4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](http://creativecommons.org/licenses/by/4.0/)
