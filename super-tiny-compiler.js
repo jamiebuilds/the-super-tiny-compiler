@@ -362,32 +362,20 @@ function tokenizer(input) {
     // later be used for `CallExpressions` but for now we only care about the
     // character.
     //
-    // We check to see if we have an open parenthesis:
-    if (char === '(') {
+    // We check to see if we have either an open or close parenthesis:
+    if (char === '(' || char === ')') {
 
       // If we do, we push a new token with the type `paren` and set the value
-      // to an open parenthesis.
+      // to an open or close parenthesis.
       tokens.push({
         type: 'paren',
-        value: '('
+        value: char
       });
 
       // Then we increment `current`
       current++;
 
       // And we `continue` onto the next cycle of the loop.
-      continue;
-    }
-
-    // Next we're going to check for a closing parenthesis. We do the same exact
-    // thing as before: Check for a closing parenthesis, add a new token,
-    // increment `current`, and `continue`.
-    if (char === ')') {
-      tokens.push({
-        type: 'paren',
-        value: ')'
-      });
-      current++;
       continue;
     }
 
