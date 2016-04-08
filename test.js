@@ -81,4 +81,10 @@ assert.deepStrictEqual(transformer(ast), newAst, 'Transformer should turn `ast` 
 assert.deepStrictEqual(codeGenerator(newAst), output, 'Code Generator should turn `newAst` into `output` string');
 assert.deepStrictEqual(compiler(input), output, 'Compiler should turn `input` into `output`');
 
+//Identifier Test
+input = '(_add 2 (subtract 4 2))';
+output = '_add(2, subtract(4, 2));';
+assert.deepStrictEqual(compiler(input), output, 'Compiler should turn `input` into `output`');
 console.log('All Passed!');
+
+
