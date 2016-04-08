@@ -446,13 +446,15 @@ function tokenizer(input) {
     //    ^^^
     //    Name token
     //
-    var LETTERS = /[a-zA-Z_0-9]/;
-    if (LETTERS.test(char)) {
+    var validIdentifierStart = /[a-zA-Z_]/;
+    var validIdentifierChar = /[a-zA-Z_0-9]/;
+    if (validIdentifierStart.test(char)) {
+    	
       var value = '';
 
       // Again we're just going to loop through all the letters pushing them to
       // a value.
-      while (LETTERS.test(char)) {
+      while (validIdentifierChar.test(char)) {
         value += char;
         char = input[++current];
       }
@@ -465,7 +467,7 @@ function tokenizer(input) {
 
       continue;
     }
-
+    
     // Finally if we have not matched a character by now, we're going to throw
     // an error and completely exit.
     throw new TypeError('I dont know what this character is: ' + char);
