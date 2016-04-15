@@ -576,10 +576,7 @@ function parser(tokens) {
       // So we create a `while` loop that will continue until it encounters a
       // token with a `type` of `'paren'` and a `value` of a closing
       // parenthesis.
-      while (
-        (token.type !== 'paren') ||
-        (token.type === 'paren' && token.value !== ')')
-      ) {
+      while (token.type !== 'paren' || token.value !== ')') {
         // we'll call the `walk` function which will return a `node` and we'll
         // push it into our `node.params`.
         node.params.push(walk());
