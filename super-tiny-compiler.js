@@ -778,8 +778,8 @@ function transformer(ast) {
   ast._context = newAst.body;
 
   // We'll start by calling the traverser function with our ast and a visitor.
-  traverser(ast, {
 
+  var visitor = {
     // The first visitor method accepts `NumberLiterals`
     NumberLiteral: function(node, parent) {
       // We'll create a new node also named `NumberLiteral` that we will push to
@@ -826,7 +826,8 @@ function transformer(ast) {
       // `context`.
       parent._context.push(expression);
     }
-  });
+  };
+  traverser(ast, visitor);
 
   // At the end of our transformer function we'll return the new ast that we
   // just created.
