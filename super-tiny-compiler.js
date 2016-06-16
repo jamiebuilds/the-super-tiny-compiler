@@ -556,7 +556,7 @@ function parser(tokens) {
       //   (add 2 (subtract 4 2))
       //
       // You'll also notice that in our tokens array we have multiple closing
-      // parenthesis.
+      // parentheses.
       //
       //   [
       //     { type: 'paren',  value: '('        },
@@ -769,9 +769,10 @@ function transformer(ast) {
   };
 
   // Next I'm going to cheat a little and create a bit of a hack. We're going to
-  // use a property named `context` on our parent nodes that we're going to push
-  // nodes to their parent's `context`. Normally you would have a better
-  // abstraction than this, but for our purposes this keeps things simple.
+  // use a property named `context` on our parent nodes that we're going to use
+  // to push nodes to their parents' `context`'s. Normally you would have a
+  // better abstraction than this, but for our purposes this keeps things
+  // simple.
   //
   // Just take note that the context is a reference *from* the old ast *to* the
   // new ast.
@@ -841,7 +842,7 @@ function transformer(ast) {
  */
 
 /**
- * Now let's move onto our last phase: The Code Generator.
+ * Now let's move on to our last phase: The Code Generator.
  *
  * Our code generator is going to recursively call itself to print each node in
  * the tree into one giant string.
