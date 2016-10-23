@@ -1,0 +1,27 @@
+{
+  "name": "the-super-tiny-compiler",
+  "version": "1.0.0",
+  "description": "Possibly the smallest compiler ever",
+  "main": "lib/super-tiny-compiler.js",
+  "scripts": {
+    "test": "npm run build && node test.js",
+    "build": "babel src -d lib",
+    "prepublish": "npm run build"
+  },
+  "repository": "thejameskyle/the-super-tiny-compiler",
+  "keywords": [
+    "compiler",
+    "tiny",
+    "example"
+  ],
+  "author": "James Kyle <me@thejameskyle.com>",
+  "license": "CC-BY-4.0",
+  "bugs": {
+    "url": "https://github.com/thejameskyle/the-super-tiny-compiler/issues"
+  },
+  "homepage": "https://github.com/thejameskyle/the-super-tiny-compiler",
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0"
+  }
+}
