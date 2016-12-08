@@ -423,7 +423,7 @@ function tokenizer(input) {
       // Then we're going to loop through each character in the sequence until
       // we encounter a character that is not a number, pushing each character
       // that is a number to our `value` and incrementing `current` as we go.
-      while (char && NUMBERS.test(char)) {
+      while (current < input.length && NUMBERS.test(char)) {
         value += char;
         char = input[++current];
       }
@@ -447,7 +447,7 @@ function tokenizer(input) {
     //    Name token
     //
     var LETTERS = /[a-z]/i;
-    if (char && LETTERS.test(char)) {
+    if (current < input.length && LETTERS.test(char)) {
       var value = '';
 
       // Again we're just going to loop through all the letters pushing them to
