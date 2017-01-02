@@ -275,8 +275,8 @@
  *     CallExpression() {},
  *   };
  *
- * When we traverse our AST we will call the methods on this visitor whenever we
- * encounter a node of a matching type.
+ * When we traverse our AST, we will call the methods on this visitor whenever we
+ * "enter" a node of a matching type.
  *
  * In order to make this useful we will also pass the node and a reference to
  * the parent node.
@@ -286,10 +286,8 @@
  *     CallExpression(node, parent) {},
  *   };
  *
- * We call these functions when we "enter" the node. But there is also the
- * possibilty of calling things on "exit".
- *
- * Imagine our tree structure from before in list form:
+ * However, there also exists the possibilty of calling things on "exit". Imagine
+ * our tree structure from before in list form:
  *
  *   - Program
  *     - CallExpression
@@ -315,7 +313,7 @@
  *     <- CallExpression (exit)
  *   <- Program (exit)
  *
- * In order to supper that, our visitors will look like this:
+ * In order to support that, the final form of our visitor will look like this:
  *
  *   var visitor = {
  *     NumberLiteral: {
