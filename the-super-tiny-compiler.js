@@ -122,7 +122,7 @@
  * Syntactic Analysis.
  *
  * 1. *Lexical Analysis* takes the raw code and splits it apart into these things
- *    called tokens by a thing called a tokenizer (or lexer).
+ *    called tokens by a thing called a tokenizer (or lexer or scanner).
  *
  *    Tokens are an array of tiny little objects that describe an isolated piece
  *    of the syntax. They could be numbers, labels, punctuation, operators,
