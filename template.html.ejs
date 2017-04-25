@@ -1,0 +1,320 @@
+<!doctype html>
+<html <% if (isCode) { %>class="is-code"<% } %>>
+  <head>
+    <title>The Super Tiny Compiler - <%= fileName %></title>
+    <meta name="description" content="">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      
+      body {
+        font: normal 1em/1.5 Consolas, monaco, monospace;
+      }
+      
+      html, body, #app {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      
+      html.is-code,
+      .is-code body {
+        background: black;
+      }
+      
+      header {
+        position: absolute;
+        top: 0;
+        height: 2em;
+        width: 100%;
+        background: blue;
+        color: white;
+        line-height: 2em;
+      }
+      
+      header a {
+        float: left;
+        color: inherit;
+        padding: 0 0.5em;
+      }
+      
+      header a:hover {
+        background: white;
+        color: blue;
+      }
+      
+      header .right {
+        float: right;
+      }
+      
+      nav {
+        position: absolute;
+        top: 2em;
+        bottom: 0;
+        left: 0;
+        width: 300px;
+        background: black;
+        overflow: auto;
+        padding: 2em 0;
+        border-right: 4px solid white;
+      }
+      
+      nav a {
+        display: block;
+        padding: 0.25em 2em;
+        color: white;
+        text-decoration: none;
+      }
+      
+      nav a.active {
+        background: white;
+        color: black;
+      }
+      
+      main {
+        position: absolute;
+        top: 2em;
+        bottom: 0;
+        left: 300px;
+        right: 0;
+        overflow: auto;
+        padding-bottom: 25%;
+      }
+      
+      .container {
+        margin: 0 auto;
+        max-width: 960px;
+        padding: 2em;
+      }
+      
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      hr {
+        border: none;
+        border-top: 4px solid black;
+      }
+      
+      pre, code {
+        font: inherit;
+        color: white;
+        background: black;
+      }
+      
+      code {
+        padding: 0 0.2em;
+      }
+      
+      pre {
+        padding: 1em;
+      }
+      
+      pre code {
+        padding: 0;
+      }
+      
+      table {
+        width: 100%;
+        border: 4px solid black;
+      }
+      
+      td, th {
+        padding: 0.5em;
+        text-align: left;
+      }
+      
+      .container > ul,
+      .container > ol {
+        padding: 0 1em;
+        padding-left: 3em;
+        border: 4px solid black;
+      }
+      
+      ul {
+        list-style: square;
+      }
+      
+      li {
+        margin: 1em 0;
+      }
+      
+      #code {
+        margin: 0;
+      }
+      
+      /**
+       * okaidia theme for JavaScript, CSS and HTML
+       * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+       * @author ocodia
+       */
+
+      code[class*="language-"],
+      pre[class*="language-"] {
+        color: #f8f8f2;
+        background: none;
+        text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+        font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        text-align: left;
+        white-space: pre;
+        word-spacing: normal;
+        word-break: normal;
+        word-wrap: normal;
+        line-height: 1.5;
+
+        -moz-tab-size: 4;
+        -o-tab-size: 4;
+        tab-size: 4;
+
+        -webkit-hyphens: none;
+        -moz-hyphens: none;
+        -ms-hyphens: none;
+        hyphens: none;
+      }
+
+      /* Code blocks */
+      pre[class*="language-"] {
+        padding: 1em;
+        margin: .5em 0;
+        overflow: auto;
+        border-radius: 0.3em;
+      }
+
+      :not(pre) > code[class*="language-"],
+      pre[class*="language-"] {
+        background: #272822;
+      }
+
+      /* Inline code */
+      :not(pre) > code[class*="language-"] {
+        padding: .1em;
+        border-radius: .3em;
+        white-space: normal;
+      }
+
+      .token.comment,
+      .token.prolog,
+      .token.doctype,
+      .token.cdata {
+        color: slategray;
+      }
+
+      .token.punctuation {
+        color: #f8f8f2;
+      }
+
+      .namespace {
+        opacity: .7;
+      }
+
+      .token.property,
+      .token.tag,
+      .token.constant,
+      .token.symbol,
+      .token.deleted {
+        color: #f92672;
+      }
+
+      .token.boolean,
+      .token.number {
+        color: #ae81ff;
+      }
+
+      .token.selector,
+      .token.attr-name,
+      .token.string,
+      .token.char,
+      .token.builtin,
+      .token.inserted {
+        color: #a6e22e;
+      }
+
+      .token.operator,
+      .token.entity,
+      .token.url,
+      .language-css .token.string,
+      .style .token.string,
+      .token.variable {
+        color: #f8f8f2;
+      }
+
+      .token.atrule,
+      .token.attr-value,
+      .token.function {
+        color: #e6db74;
+      }
+
+      .token.keyword {
+        color: #66d9ef;
+      }
+
+      .token.regex,
+      .token.important {
+        color: #fd971f;
+      }
+
+      .token.important,
+      .token.bold {
+        font-weight: bold;
+      }
+      .token.italic {
+        font-style: italic;
+      }
+
+      .token.entity {
+        cursor: help;
+      }
+    </style>
+  </head>
+  <body>    
+    <div id="app">
+      <header>
+        <a href="https://github.com/thejameskyle/the-super-tiny-compiler">
+          /Users/thejameskyle/code/the-super-tiny-compiler/<%= fileName %>
+        </a>
+        
+        <a class="right" href="https://github.com/thejameskyle/the-super-tiny-compiler">
+          Star this in GitHub
+        </a>
+        
+        <a class="right" href="https://twitter.com/thejameskyle">
+          Follow me on Twitter
+        </a>
+        
+        <a class="right" href="https://glitch.com/edit/#!/the-super-tiny-compiler">
+          Remix this in Glitch
+        </a>
+      </header>
+      
+      <nav>
+        <% routes.forEach(function(route) { %>
+          <a href="<%= route.routePath %>" <% if (fileName === route.routeName) { %>class="active"<% } %>>
+            <%= route.routeName %>
+          </a>
+        <% }); %>
+      </nav>
+
+      <main>
+        <% if (isCode) { %>
+          <pre id="code"><%- fileContents %></pre>
+        <% } else { %>
+          <div class="container">
+            <%- fileContents %>
+          </div>
+        <% } %>
+        
+        <% if (fileName === '6-compiler.js') { %>
+          <img src="https://cdn.glitch.com/da026c15-c2dc-4ff8-bbed-d9d003c04338%2Ftumblr_mvemcyarmn1rslphyo1_400.gif?1492115698121" alt="Carlton Dance">
+        <% } %>
+      </main>
+    </div>
+  </body>
+</html>

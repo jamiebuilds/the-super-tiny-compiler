@@ -1,24 +1,21 @@
-[![The Super Tiny Compiler](https://cloud.githubusercontent.com/assets/952783/21579290/5755288a-cf75-11e6-90e0-029529a44a38.png)](the-super-tiny-compiler.js)
+# Welcome to The Super Tiny Compiler!
 
-***Welcome to The Super Tiny Compiler!***
+***An [@thejameskyle](http://thejameskyle.com/) production***
 
-This is an ultra-simplified example of all the major pieces of a modern compiler
-written in easy to read JavaScript.
+---
+
+This is an ultra-simplified example of all the major pieces of a modern
+compiler written in easy to read JavaScript.
 
 Reading through the guided code will help you learn about how *most* compilers
 work from end to end.
 
-### [Want to jump into the code? Click here](the-super-tiny-compiler.js)
-
-### [You can also check it out on Glitch](https://the-super-tiny-compiler.glitch.me/)
-
----
-
 ### Why should I care?
 
-That's fair, most people don't really have to think about compilers in their day
-jobs. However, compilers are all around you, tons of the tools you use are based
-on concepts borrowed from compilers.
+That's fair, most people don't really have to think about compilers in their
+day jobs. However, compilers are all around you, tons of the tools you use are 
+based on concepts borrowed from compilers. These are really useful concepts to
+have at your disposal.
 
 ### But compilers are scary!
 
@@ -27,21 +24,13 @@ taken something that is reasonably straightforward and made it so scary that
 most think of it as this totally unapproachable thing that only the nerdiest of
 the nerds are able to understand.
 
+I've done my best to try and keep this from being a scary experience. I hope
+that reading this will be a positive learning experience for you.
+
 ### Okay so where do I begin?
 
-Awesome! Head on over to the [the-super-tiny-compiler.js](the-super-tiny-compiler.js)
-file.
-
-### I'm back, that didn't make sense
-
-Ouch, I'm really sorry. I'm planning on doing a lot more work on this to add
-inline annotations. If you want to come back when that's done, you can either
-watch/star this repo or follow me on
-[twitter](https://twitter.com/thejameskyle) for updates.
-
-### Tests
-
-Run with `node test.js`
+Awesome! Head on over to [**0-introduction.md**](./intro) and then
+work your way down the list of files.
 
 ---
 

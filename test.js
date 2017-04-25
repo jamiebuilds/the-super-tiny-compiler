@@ -1,16 +1,22 @@
-const {
-  tokenizer,
-  parser,
-  transformer,
-  codeGenerator,
-  compiler,
-} = require('./the-super-tiny-compiler');
-const assert = require('assert');
+var tokenizer     = require('./1-tokenizer');
+var parser        = require('./2-parser');
+// Note: The traverser is only used inside of the transformer...
+var transformer   = require('./4-transformer');
+var codeGenerator = require('./5-code-generator');
+var compiler      = require('./6-compiler');
 
-const input  = '(add 2 (subtract 4 2))';
-const output = 'add(2, subtract(4, 2));';
 
-const tokens = [
+// assert is a Node.js utility for asserting values and throwing and error if
+// they aren't what you expect
+var assert = require('assert');
+
+/**
+ * Setting up all of the expected values through out our compiler phases:
+ */ 
+var input  = '(add 2 (subtract 4 2))';
+var output = 'add(2, subtract(4, 2));';
+
+var tokens = [
   { type: 'paren',  value: '('        },
   { type: 'name',   value: 'add'      },
   { type: 'number', value: '2'        },
@@ -22,7 +28,7 @@ const tokens = [
   { type: 'paren',  value: ')'        }
 ];
 
-const ast = {
+var ast = {
   type: 'Program',
   body: [{
     type: 'CallExpression',
@@ -44,7 +50,7 @@ const ast = {
   }]
 };
 
-const newAst = {
+var newAst = {
   type: 'Program',
   body: [{
     type: 'ExpressionStatement',
@@ -75,10 +81,16 @@ const newAst = {
   }]
 };
 
-assert.deepStrictEqual(tokenizer(input), tokens, 'Tokenizer should turn `input` string into `tokens` array');
-assert.deepStrictEqual(parser(tokens), ast, 'Parser should turn `tokens` array into `ast`');
-assert.deepStrictEqual(transformer(ast), newAst, 'Transformer should turn `ast` into a `newAst`');
-assert.deepStrictEqual(codeGenerator(newAst), output, 'Code Generator should turn `newAst` into `output` string');
-assert.deepStrictEqual(compiler(input), output, 'Compiler should turn `input` into `output`');
+/**
+ * Now let's write some assertions to make sure our compiler does everything we
+ * want it to...
+ */
 
+assert.deepStrictEqual(     tokenizer(input),  tokens, 'Tokenizer should turn `input` string into `tokens` array');
+assert.deepStrictEqual(        parser(tokens), ast,    'Parser should turn `tokens` array into `ast`');
+assert.deepStrictEqual(   transformer(ast),    newAst, 'Transformer should turn `ast` into a `newAst`');
+assert.deepStrictEqual( codeGenerator(newAst), output, 'Code Generator should turn `newAst` into `output` string');
+assert.deepStrictEqual(      compiler(input),  output, 'Compiler should turn `input` into `output`');
+
+// If none of the above asserts threw an error...
 console.log('All Passed!');

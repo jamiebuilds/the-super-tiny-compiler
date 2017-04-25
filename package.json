@@ -1,7 +1,15 @@
 {
   "name": "the-super-tiny-compiler",
-  "version": "1.0.0",
   "author": "James Kyle <me@thejameskyle.com> (thejameskyle.com)",
   "license": "CC-BY-4.0",
-  "main": "./the-super-tiny-compiler.js"
+  "repository": "thejameskyle/the-super-tiny-compiler",
+  "dependencies": {
+    "express": "^4.15.2",
+    "markdown-it": "^8.3.1",
+    "ejs": "^2.5.6",
+    "prismjs": "^9000.0.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
 }
