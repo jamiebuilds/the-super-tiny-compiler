@@ -1,0 +1,13 @@
+<main <% if (isCode) { %>class="is-code"<% } %>>
+  <% if (isCode) { %>
+    <pre id="code"><%- fileContents %></pre>
+  <% } else { %>
+    <div class="container">
+      <%- fileContents %>
+    </div>
+  <% } %>
+
+  <% if (fileName === '6-compiler.js') { %>
+    <img src="https://cdn.glitch.com/da026c15-c2dc-4ff8-bbed-d9d003c04338%2Ftumblr_mvemcyarmn1rslphyo1_400.gif?1492115698121" alt="Carlton Dance">
+  <% } %>
+</main>

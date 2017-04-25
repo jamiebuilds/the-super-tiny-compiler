@@ -1,12 +1,18 @@
 <!doctype html>
-<html <% if (isCode) { %>class="is-code"<% } %>>
+<html>
   <head>
-    <title>The Super Tiny Compiler - <%= fileName %></title>
+    <title><%- include('title') %></title>
     <meta name="description" content="">
     <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+    <!-- We're including this to allow us to use `fetch` in more browsers. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+    <script src="/assets/client.js"></script>
+    <script src="/assets/test.js"></script>
+    <link rel="stylesheet" href="/assets/nprogress.css" />
     <style>
       * {
         box-sizing: border-box;
@@ -24,9 +30,11 @@
         overflow: hidden;
       }
       
-      html.is-code,
-      .is-code body {
+      #app {
         background: black;
+      }
+      main:not(.is-code) {
+        background: white;
       }
       
       header {
@@ -85,7 +93,11 @@
         left: 300px;
         right: 0;
         overflow: auto;
-        padding-bottom: 25%;
+        /* The topbar, the padding, and the last line */
+        padding-bottom: calc(100vh - 2em - 1em - 2em);
+      }
+      main pre#code {
+        padding-bottom: 0;
       }
       
       .container {
@@ -278,7 +290,7 @@
     <div id="app">
       <header>
         <a href="https://github.com/thejameskyle/the-super-tiny-compiler">
-          /Users/thejameskyle/code/the-super-tiny-compiler/<%= fileName %>
+          /Users/thejameskyle/code/the-super-tiny-compiler/<span class="js-file-name"><%= fileName %></span>
         </a>
         
         <a class="right" href="https://github.com/thejameskyle/the-super-tiny-compiler">
@@ -302,18 +314,7 @@
         <% }); %>
       </nav>
 
-      <main>
-        <% if (isCode) { %>
-          <pre id="code"><%- fileContents %></pre>
-        <% } else { %>
-          <div class="container">
-            <%- fileContents %>
-          </div>
-        <% } %>
-        
-        <% if (fileName === '6-compiler.js') { %>
-          <img src="https://cdn.glitch.com/da026c15-c2dc-4ff8-bbed-d9d003c04338%2Ftumblr_mvemcyarmn1rslphyo1_400.gif?1492115698121" alt="Carlton Dance">
-        <% } %>
+      <%- include('content') %>
       </main>
     </div>
   </body>

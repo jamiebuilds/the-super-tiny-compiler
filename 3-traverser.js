@@ -78,7 +78,7 @@ function traverser(ast, visitor) {
       // And again, if we haven't recognized the node type then we'll throw an
       // error.
       default:
-        throw new TypeError(node.type);
+        throw new SyntaxError(`Unrecognized node ${node.type}: ${JSON.stringify(node)}}`);
     }
 
     // If there is an `exit` method for this node type we'll call it with the

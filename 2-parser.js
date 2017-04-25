@@ -14,8 +14,9 @@
 
 // Okay, so we define a `parser` function that accepts our array of `tokens`.
 function parser(tokens) {
-
   // Again we keep a `current` variable that we will use as a cursor.
+  // Because we're not iterating over the source code, we are just
+  // using a number.
   let current = 0;
 
   // But this time we're going to use recursion instead of a `while` loop. So we
@@ -24,6 +25,7 @@ function parser(tokens) {
 
     // Inside the walk function we start by grabbing the `current` token.
     let token = tokens[current];
+    if (!token) return;
 
     // We're going to split each type of token off into a different code path,
     // starting off with `number` tokens.
@@ -39,6 +41,8 @@ function parser(tokens) {
       return {
         type: 'NumberLiteral',
         value: token.value,
+        start: token.start,
+        end: token.end,
       };
     }
 
@@ -50,6 +54,8 @@ function parser(tokens) {
       return {
         type: 'StringLiteral',
         value: token.value,
+        start: token.start,
+        end: token.end,
       };
     }
 
@@ -60,9 +66,14 @@ function parser(tokens) {
       token.value === '('
     ) {
 
+      const initial = token;
       // We'll increment `current` to skip the parenthesis since we don't care
       // about it in our AST.
       token = tokens[++current];
+      // If we've reached the end of the program, throw a syntax error.
+      if (!token) {
+        throw new SyntaxError(`Unclosed function call at ${initial.start}`);
+      }
 
       // We create a base node with the type `CallExpression`, and we're going
       // to set the name as the current token's value since the next token after
@@ -71,10 +82,19 @@ function parser(tokens) {
         type: 'CallExpression',
         name: token.value,
         params: [],
+        start: token.start,
       };
 
+      // If the user writes `()` as code, throw a syntax error.
+      if (token.type === 'paren' && token.value === ')') {
+        throw new SyntaxError(`Unexpected empty function call at ${tokens[current - 1].start}–${token.end}`)
+      }
       // We increment `current` *again* to skip the name token.
       token = tokens[++current];
+      // If we've reached the end of the program (for example: `(foo`), throw a syntax error.
+      if (!token) {
+        throw new SyntaxError(`Unclosed function call at ${initial.start}-${tokens[current - 1].end}`);
+      }
 
       // And now we want to loop through each token that will be the `params` of
       // our `CallExpression` until we encounter a closing parenthesis.
@@ -118,7 +138,13 @@ function parser(tokens) {
         // push it into our `node.params`.
         node.params.push(walk());
         token = tokens[current];
+        // If we've reached the end of the program, throw a syntax error.
+        if (!token) {
+          throw new SyntaxError('Unclosed function call at ' + initial.start + '-' + tokens[current - 1].end);
+        }
       }
+      // Next, we save the end position of the call
+      node.end = token.end;
 
       // Finally we will increment `current` one last time to skip the closing
       // parenthesis.
@@ -127,10 +153,15 @@ function parser(tokens) {
       // And return the node.
       return node;
     }
+    
+    // If the user writes a literal name token (`foo`), throw a syntax error.
+    if (token.type === 'name') {
+      throw new SyntaxError(`Unexpected name '${token.value}' at ${token.start}–${token.end}`)
+    }
 
     // Again, if we haven't recognized the token type by now we're going to
     // throw an error.
-    throw new TypeError(token.type);
+    throw new SyntaxError(`Unrecognized token: ${JSON.stringify(token)}`);
   }
 
   // Now, we're going to create our AST which will have a root which is a

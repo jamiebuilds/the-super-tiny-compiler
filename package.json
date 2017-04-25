@@ -7,7 +7,8 @@
     "express": "^4.15.2",
     "markdown-it": "^8.3.1",
     "ejs": "^2.5.6",
-    "prismjs": "^9000.0.1"
+    "prismjs": "^9000.0.1",
+    "body-parser": "^1.17.1"
   },
   "scripts": {
     "start": "node server.js"
