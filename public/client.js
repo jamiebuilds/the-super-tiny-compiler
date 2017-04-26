@@ -19,6 +19,7 @@ document.addEventListener('click', function (e) {
     document.querySelector('main').outerHTML = json.html;
     // and change the file name in the header.
     document.querySelector('.js-file-name').textContent = json.context.fileName;
+    document.querySelector('.js-file-name-link').href = 'https://github.com/j-f1/forked-super-tiny-compiler/tree/glitch/' + json.context.fileName;
 
     // Finally, update the title bar and address bar,
     history.pushState(null, json.title, target.href);

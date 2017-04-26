@@ -93,8 +93,10 @@
         left: 300px;
         right: 0;
         overflow: auto;
+      }
+      main.is-code {
         /* The topbar, the padding, and the last line */
-        padding-bottom: calc(100vh - 2em - 1em - 2em);
+        padding-bottom: calc(100vh - 2em - 1em - 0.7em);
       }
       main pre#code {
         padding-bottom: 0;
@@ -289,19 +291,15 @@
   <body>    
     <div id="app">
       <header>
-        <a href="https://github.com/thejameskyle/the-super-tiny-compiler">
-          /Users/thejameskyle/code/the-super-tiny-compiler/<span class="js-file-name"><%= fileName %></span>
+        <a href="https://github.com/<%= process.env.NWO %>/tree/<%= process.env.BRANCH %>/<%= fileName %>" class="js-file-name-link">
+          /Users/you/code/the-super-tiny-compiler/<span class="js-file-name"><%= fileName %></span>
         </a>
         
-        <a class="right" href="https://github.com/thejameskyle/the-super-tiny-compiler">
+        <a class="right" href="https://github.com/<%= process.env.NWO %>">
           Star this in GitHub
         </a>
-        
-        <a class="right" href="https://twitter.com/thejameskyle">
-          Follow me on Twitter
-        </a>
-        
-        <a class="right" href="https://glitch.com/edit/#!/the-super-tiny-compiler">
+                
+        <a class="right" href="https://glitch.com/edit/#!/<%= process.env.PROJECT_NAME %>">
           Remix this in Glitch
         </a>
       </header>

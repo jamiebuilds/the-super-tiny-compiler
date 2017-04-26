@@ -6,6 +6,9 @@ var path = require('path');
 var ejs = require('ejs');
 var fs = require('fs');
 
+process.env.NWO = process.env.NWO || 'thejameskyle/the-super-tiny-compiler';
+process.env.BRANCH = process.env.BRANCH || 'master';
+
 // First, let's create the server,
 var app = express();
 // add a `req.body` property to requests containing
