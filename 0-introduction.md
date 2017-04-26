@@ -213,7 +213,7 @@ var visitor = {
 };
 ```
 
-However, there also exists the possibilty of calling things on "exit". Imagine
+However, there also exists the possibility of calling things on "exit". Imagine
 our tree structure from before in list form:
 
 - Program
