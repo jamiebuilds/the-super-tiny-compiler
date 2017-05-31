@@ -259,7 +259,7 @@
  *
  * If we were manipulating this AST directly, instead of creating a separate AST,
  * we would likely introduce all sorts of abstractions here. But just visiting
- * each node in the tree is enough.
+ * each node in the tree is not enough.
  *
  * The reason I use the word "visiting" is because there is this pattern of how
  * to represent operations on elements of an object structure.
