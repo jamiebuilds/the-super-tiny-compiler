@@ -1,7 +1,12 @@
 {
   "name": "the-super-tiny-compiler",
   "version": "1.0.0",
-  "author": "James Kyle <me@thejameskyle.com> (thejameskyle.com)",
-  "license": "CC-BY-4.0",
-  "main": "./the-super-tiny-compiler.js"
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world"
+  },
+  "devDependencies": {
+    "bs-platform": "1.9.2"
+  }
 }
