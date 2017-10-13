@@ -709,16 +709,31 @@ function parser(tokens) {
  * encounter a node with a matching type.
  *
  *   traverse(ast, {
- *     Program(node, parent) {
- *       // ...
+ *     Program: {
+ *       enter(node, parent) {
+ *         // ...
+ *       },
+ *       exit(node, parent) {
+ *         // ...
+ *       },
  *     },
  *
- *     CallExpression(node, parent) {
- *       // ...
+ *     CallExpression: {
+ *       enter(node, parent) {
+ *         // ...
+ *       },
+ *       exit(node, parent) {
+ *         // ...
+ *       },
  *     },
  *
- *     NumberLiteral(node, parent) {
- *       // ...
+ *     NumberLiteral: {
+ *       enter(node, parent) {
+ *         // ...
+ *       },
+ *       exit(node, parent) {
+ *         // ...
+ *       },
  *     },
  *   });
  */
