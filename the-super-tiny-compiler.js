@@ -384,7 +384,7 @@ function tokenizer(input) {
   let current = 0;
 
   // And a `tokens` array for pushing our tokens to.
-  let tokens = [];
+  const tokens = [];
 
   // We start by creating a `while` loop where we are setting up our `current`
   // variable to be incremented as much as we want `inside` the loop.
@@ -517,7 +517,7 @@ function tokenizer(input) {
 
       // Again we're just going to loop through all the letters pushing them to
       // a value.
-      while (LETTERS.test(char)) {
+      while (char && LETTERS.test(char)) {
         value += char;
         char = input[++current];
       }
