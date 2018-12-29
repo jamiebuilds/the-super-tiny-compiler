@@ -594,10 +594,7 @@ function parser(tokens) {
 
     // Next we're going to look for CallExpressions. We start this off when we
     // encounter an open parenthesis.
-    if (
-      token.type === 'paren' &&
-      token.value === '('
-    ) {
+    if (token.type === 'paren' && token.value === '(') {
 
       // We'll increment `current` to skip the parenthesis since we don't care
       // about it in our AST.
@@ -971,23 +968,14 @@ function codeGenerator(node) {
     // For `ExpressionStatement` we'll call the code generator on the nested
     // expression and we'll add a semicolon...
     case 'ExpressionStatement':
-      return (
-        codeGenerator(node.expression) +
-        ';' // << (...because we like to code the *correct* way)
-      );
+      return `${codeGenerator(node.expression)};`;
 
     // For `CallExpression` we will print the `callee`, add an open
     // parenthesis, we'll map through each node in the `arguments` array and run
     // them through the code generator, joining them with a comma, and then
     // we'll add a closing parenthesis.
     case 'CallExpression':
-      return (
-        codeGenerator(node.callee) +
-        '(' +
-        node.arguments.map(codeGenerator)
-          .join(', ') +
-        ')'
-      );
+      return codeGenerator(node.callee) + '(' + node.arguments.map(codeGenerator).join(', ') + ')';
 
     // For `Identifier` we'll just return the `node`'s name.
     case 'Identifier':
@@ -999,7 +987,7 @@ function codeGenerator(node) {
 
     // For `StringLiteral` we'll add quotations around the `node`'s value.
     case 'StringLiteral':
-      return '"' + node.value + '"';
+      return `"${node.value}"`;
 
     // And if we haven't recognized the node, we'll throw an error.
     default:
