@@ -384,7 +384,7 @@ function tokenizer(input) {
   let current = 0;
 
   // And a `tokens` array for pushing our tokens to.
-  let tokens = [];
+  const tokens = [];
 
   // We start by creating a `while` loop where we are setting up our `current`
   // variable to be incremented as much as we want `inside` the loop.
@@ -451,7 +451,7 @@ function tokenizer(input) {
     //        Only two separate tokens
     //
     // So we start this off when we encounter the first number in a sequence.
-    let NUMBERS = /[0-9]/;
+    const NUMBERS = /[0-9]/;
     if (NUMBERS.test(char)) {
 
       // We're going to create a `value` string that we are going to push
@@ -606,7 +606,7 @@ function parser(tokens) {
       // We create a base node with the type `CallExpression`, and we're going
       // to set the name as the current token's value since the next token after
       // the open parenthesis is the name of the function.
-      let node = {
+      const node = {
         type: 'CallExpression',
         name: token.value,
         params: [],
@@ -674,7 +674,7 @@ function parser(tokens) {
 
   // Now, we're going to create our AST which will have a root which is a
   // `Program` node.
-  let ast = {
+  const ast = {
     type: 'Program',
     body: [],
   };
@@ -744,7 +744,7 @@ function traverser(ast, visitor) {
 
   // A `traverseArray` function that will allow us to iterate over an array and
   // call the next function that we will define: `traverseNode`.
-  function traverseArray(array, parent) {
+  const traverseArray = (array, parent) => {
     array.forEach(child => {
       traverseNode(child, parent);
     });
@@ -756,7 +756,7 @@ function traverser(ast, visitor) {
 
     // We start by testing for the existence of a method on the visitor with a
     // matching `type`.
-    let methods = visitor[node.type];
+    const methods = visitor[node.type];
 
     // If there is an `enter` method for this node type we'll call it with the
     // `node` and its `parent`.
@@ -859,7 +859,7 @@ function transformer(ast) {
 
   // We'll create a `newAst` which like our previous AST will have a program
   // node.
-  let newAst = {
+  const newAst = {
     type: 'Program',
     body: [],
   };
@@ -966,8 +966,7 @@ function codeGenerator(node) {
     // If we have a `Program` node. We will map through each node in the `body`
     // and run them through the code generator and join them with a newline.
     case 'Program':
-      return node.body.map(codeGenerator)
-        .join('\n');
+      return node.body.map(codeGenerator).join('\n');
 
     // For `ExpressionStatement` we'll call the code generator on the nested
     // expression and we'll add a semicolon...
@@ -1026,13 +1025,12 @@ function codeGenerator(node) {
  */
 
 function compiler(input) {
-  let tokens = tokenizer(input);
-  let ast    = parser(tokens);
-  let newAst = transformer(ast);
-  let output = codeGenerator(newAst);
+  const tokens = tokenizer(input);
+  const ast    = parser(tokens);
+  const newAst = transformer(ast);
 
   // and simply return the output!
-  return output;
+  return codeGenerator(newAst);
 }
 
 /**
