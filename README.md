@@ -40,6 +40,10 @@ Ouch, I'm really sorry. Let me know how it can be improved.
 
 Run with `node test.js`
 
+### Read this in other languages
+
+- [中文/Chinese](https://github.com/YongzeYao/the-super-tiny-compiler-CN)
+
 ---
 
 [![cc-by-4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](http://creativecommons.org/licenses/by/4.0/)
