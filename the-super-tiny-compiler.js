@@ -76,16 +76,15 @@
  */
 
 /**
- * Today we're going to write a compiler together. But not just any compiler... A
- * super duper teeny tiny compiler! A compiler that is so small that if you
- * remove all the comments this file would only be ~200 lines of actual code.
+ * 오늘 우리는 함께 컴파일러를 작성할 것입니다. 하지만 여러분이 알고있는 컴파일러가 아니라... 매우
+ * 기능이 간소하고 작은 컴파일러입니다! 너무 작아서 주석을 모두 제거하면 이 파일의 실제 코드는 200줄 밖에
+ * 되지 않습니다.
  *
- * We're going to compile some lisp-like function calls into some C-like
- * function calls.
+ * 우리는 어떤 lisp과 같은 함수 호출을 C와 같은 함수호출로 컴파일 할 것입니다.
  *
- * If you are not familiar with one or the other. I'll just give you a quick intro.
+ * 만약 여러분이 위 언어에 익숙하지 않을 수 있습니다. 그래서 간단하게 소개하도록 하겠습니다.
  *
- * If we had two functions `add` and `subtract` they would be written like this:
+ * 만약 `add`와 `subtract`라는 두 함수가 있다면 다음과 같이 작성될 것입니다:
  *
  *                  LISP                      C
  *
@@ -93,55 +92,47 @@
  *   4 - 2          (subtract 4 2)            subtract(4, 2)
  *   2 + (4 - 2)    (add 2 (subtract 4 2))    add(2, subtract(4, 2))
  *
- * Easy peezy right?
+ * 참 쉽죠?
  *
- * Well good, because this is exactly what we are going to compile. While this
- * is neither a complete LISP or C syntax, it will be enough of the syntax to
- * demonstrate many of the major pieces of a modern compiler.
+ * 좋습니다. 이것들이 바로 오늘 우리가 컴파일 할 것들입니다. 위 함수들은 완전한 LISP이나 C 구문은
+ * 아니지만, 현대 컴파일러의 주요한 부분을 많이 증명하기엔 충분합니다.
  */
 
 /**
- * Most compilers break down into three primary stages: Parsing, Transformation,
- * and Code Generation
+ * 대부분의 컴파일러들은 세가지 중요한 단계를 가지고 있습니다: Parsing, Transformation,
+ * 그리고 Code Generation 입니다.
  *
- * 1. *Parsing* is taking raw code and turning it into a more abstract
- *    representation of the code.
+ * 1. *Parsing*은 원시 코드를 추상적인 코드로 바꿔주는 단계입니다.
  *
- * 2. *Transformation* takes this abstract representation and manipulates to do
- *    whatever the compiler wants it to.
+ * 2. *Transformation*은 이 추상적인 코드를 가지고, 컴파일러가 원하는 것은 무엇이든지 할 수
+ *    있도록 변형합니다.
  *
- * 3. *Code Generation* takes the transformed representation of the code and
- *    turns it into new code.
+ * 3. *Code Generation*은 변형된 추상젹인 코드를 새로운 코드로 바꿉니다.
  */
 
 /**
  * Parsing
  * -------
  *
- * Parsing typically gets broken down into two phases: Lexical Analysis and
- * Syntactic Analysis.
+ * 구문 분석은 일반적으로 두 단게로 분류됩니다: Lexical Analysis and Syntactic Analysis.
  *
- * 1. *Lexical Analysis* takes the raw code and splits it apart into these things
- *    called tokens by a thing called a tokenizer (or lexer).
+ * 1. *Lexical Analysis*는 원시 코드를 가져다가 tokenizer(또는 lexer)라고 불리는 것에 의헤
+ *    토큰이라고 불리는 것으로 분리됩니다.
  *
- *    Tokens are an array of tiny little objects that describe an isolated piece
- *    of the syntax. They could be numbers, labels, punctuation, operators,
- *    whatever.
+ *    토큰은 구문의 분리된 부분을 설명하는 작은 물체들의 배열입니다. 숫자, 라벨, 구두점, 조작자,
+ *    무엇이든 될 수 있습니다.
  *
- * 2. *Syntactic Analysis* takes the tokens and reformats them into a
- *    representation that describes each part of the syntax and their relation
- *    to one another. This is known as an intermediate representation or
- *    Abstract Syntax Tree.
+ * 2. *Syntactic Analysis*는 토큰을 구문의 각 부분과 그 관계를 설명하는 표현으로 재구성합니다.
+ *    이것은 중간 표현 또는 추상 구문 트리로 알려져 있습니다.
  *
- *    An Abstract Syntax Tree, or AST for short, is a deeply nested object that
- *    represents code in a way that is both easy to work with and tells us a lot
- *    of information.
+ *    추상 구문 트리, 즉 줄여서 AST는 코드를 다루기 쉽고 우리에게 많은 정보를 알려주는 방식으로
+ *    표현된 중첩된 객체 입니다.
  *
- * For the following syntax:
+ * 다음 구문은:
  *
  *   (add 2 (subtract 4 2))
  *
- * Tokens might look something like this:
+ * 토큰을 이용하면 다음과 같이 보일지도 모릅니다:
  *
  *   [
  *     { type: 'paren',  value: '('        },
@@ -155,7 +146,7 @@
  *     { type: 'paren',  value: ')'        },
  *   ]
  *
- * And an Abstract Syntax Tree (AST) might look like this:
+ * 그리고 추상 구문 트리 (AST)는 아마 아래와 같이 보일겁니다:
  *
  *   {
  *     type: 'Program',
@@ -184,26 +175,23 @@
  * Transformation
  * --------------
  *
- * The next type of stage for a compiler is transformation. Again, this just
- * takes the AST from the last step and makes changes to it. It can manipulate
- * the AST in the same language or it can translate it into an entirely new
- * language.
+ * 컴파일러의 다음 스테이지 유형은 변환입니다. 다시 말하지만, 이건 그냥 마지막 단계에서 AST를 가지고
+ * 변경하는것 뿐입니다. 같은 언어로 AST를 조작하거나 완전히 새로운 언어로 바꿀 수도 있습니다.
  *
- * Let’s look at how we would transform an AST.
+ * AST를 어떻게 변화시킬지 살펴보도록 할까요.
  *
- * You might notice that our AST has elements within it that look very similar.
- * There are these objects with a type property. Each of these are known as an
- * AST Node. These nodes have defined properties on them that describe one
- * isolated part of the tree.
+ * 여러분은 AST의 구성 요소들이 매우 비슷하게 생겼다는 것을 눈치챘을 겁니다.
+ * 이 오브젝트들은 타입 속성을 가지고 있습니다. 이것들 각각은 AST 노드라고 알려져 있습니다. 이 노드들은
+ * 트리의 분리된 한 부분을 설명하는 속성들을 가지고 있습니다.
  *
- * We can have a node for a "NumberLiteral":
+ * 우리는 "NumberLiteral"를 위한 노드를 가질 수 있습니다:
  *
  *   {
  *     type: 'NumberLiteral',
  *     value: '2',
  *   }
  *
- * Or maybe a node for a "CallExpression":
+ * 또는 "CallExpression"노드도 있을 수 있습니다:
  *
  *   {
  *     type: 'CallExpression',
@@ -211,20 +199,16 @@
  *     params: [...nested nodes go here...],
  *   }
  *
- * When transforming the AST we can manipulate nodes by
- * adding/removing/replacing properties, we can add new nodes, remove nodes, or
- * we could leave the existing AST alone and create an entirely new one based
- * on it.
+ * AST를 변환할 때 우리는 속성을 추가/제거/교체하여 노드를 조작할 수 있고, 새로운 노드를 추가하거나,
+ * 노드를 제거하거나, 기존 AST를 그대로 두고 그것에 기반한 완전히 새로운 노드를 만들 수 있습니다.
  *
- * Since we’re targeting a new language, we’re going to focus on creating an
- * entirely new AST that is specific to the target language.
+ * 우리는 새로운 언어를 목표로 하고 있기 때문에, 완전히 새로운 AST를 만드는 데 초점을 맞출 것입니다.
  *
  * Traversal
  * ---------
  *
- * In order to navigate through all of these nodes, we need to be able to
- * traverse through them. This traversal process goes to each node in the AST
- * depth-first.
+ * 모든 노드를 탐색하기 위해서는 우리는 노드들을 순회할 필요성이 있습니다. 이 순회 과정은 AST의 각각의
+ * 노드들을 깊이를 우선하여 탐색합니다.
  *
  *   {
  *     type: 'Program',
@@ -248,46 +232,43 @@
  *     }]
  *   }
  *
- * So for the above AST we would go:
+ * 위 AST를 위해 우리는:
  *
- *   1. Program - Starting at the top level of the AST
- *   2. CallExpression (add) - Moving to the first element of the Program's body
- *   3. NumberLiteral (2) - Moving to the first element of CallExpression's params
- *   4. CallExpression (subtract) - Moving to the second element of CallExpression's params
- *   5. NumberLiteral (4) - Moving to the first element of CallExpression's params
- *   6. NumberLiteral (2) - Moving to the second element of CallExpression's params
+ *   1. Program - AST의 최상위 레벨에서 시작
+ *   2. CallExpression (add) - Program의 body에서 첫번째 요소로 이동
+ *   3. NumberLiteral (2) - CallExpression의 첫 번째 요소로 이동
+ *   4. CallExpression (subtract) - CallExpression의 두 번째 요소로 이동
+ *   5. NumberLiteral (4) - CallExpression의 첫 번째 요소로 이동
+ *   6. NumberLiteral (2) - CallExpression의 두 번째 요소로 이동
  *
- * If we were manipulating this AST directly, instead of creating a separate AST,
- * we would likely introduce all sorts of abstractions here. But just visiting
- * each node in the tree is enough for what we're trying to do.
+ * 만약 우리가 이 AST를 직접 조작한다면, 별도의 AST를 만드는 대신에 다양한 종류의 추상화를 도입할 겁니다.
+ * 하지만 트리안에 있는 각각의 노드들을 방문하는 것만으로도 우리가 하려는 일을 할 수 있습니다.
  *
- * The reason I use the word "visiting" is because there is this pattern of how
- * to represent operations on elements of an object structure.
+ * "방문"이라는 단어를 사용하는 이유는, 객체 구조의 요소에 대한 작업을 어떻게 표현해야 하는지에 대해
+ * 패턴이 있기 때문입니다.
  *
  * Visitors
  * --------
  *
- * The basic idea here is that we are going to create a “visitor” object that
- * has methods that will accept different node types.
+ * 기본적인 아이디어는 다른 노드 타입을 가지고 있는 방문자 객체를 만드는 것입니다.
  *
  *   var visitor = {
  *     NumberLiteral() {},
  *     CallExpression() {},
  *   };
  *
- * When we traverse our AST, we will call the methods on this visitor whenever we
- * "enter" a node of a matching type.
+ * 우리가 AST를 순회할 때, 매칭되는 타입의 노드에 방문했을 경우, 해당하는 메서드를 visitor에서 호출
+ * 할 것입니다.
  *
- * In order to make this useful we will also pass the node and a reference to
- * the parent node.
+ * 이것을 유용하게 만들기 위해 우리는 노드와 상위 노드에 대한 참조를 전달할 것입니다.
  *
  *   var visitor = {
  *     NumberLiteral(node, parent) {},
  *     CallExpression(node, parent) {},
  *   };
  *
- * However, there also exists the possibility of calling things on "exit". Imagine
- * our tree structure from before in list form:
+ * 그러나, 우리는 "exit"를 호출할 가능성에 대해서도 고려해야합니다. 리스트로 부터 우리의 트리 구조에 대해
+ * 상상해 볼까요:
  *
  *   - Program
  *     - CallExpression
@@ -296,9 +277,8 @@
  *         - NumberLiteral
  *         - NumberLiteral
  *
- * As we traverse down, we're going to reach branches with dead ends. As we
- * finish each branch of the tree we "exit" it. So going down the tree we
- * "enter" each node, and going back up we "exit".
+ * 계속 순회를 하다보면, 언젠가는 마지막 가지에 닿을 것입니다. 각 가지의 끝에 도달했을 때, 우리는 해당 트리에서
+ * "exit" 합니다. 그래서 각각의 트리를 내려가는것을 "enter", 다시 위로 올라가는 것을 "exit"라 합니다.
  *
  *   -> Program (enter)
  *     -> CallExpression (enter)
@@ -313,7 +293,7 @@
  *     <- CallExpression (exit)
  *   <- Program (exit)
  *
- * In order to support that, the final form of our visitor will look like this:
+ * 이를 위해 visitor의 최종 형태는 다음과 같습니다:
  *
  *   var visitor = {
  *     NumberLiteral: {
@@ -327,36 +307,33 @@
  * Code Generation
  * ---------------
  *
- * The final phase of a compiler is code generation. Sometimes compilers will do
- * things that overlap with transformation, but for the most part code
- * generation just means take our AST and string-ify code back out.
+ * 컴파일러의 마지막 단계는 코드 생성입니다. 때때로 컴파일러는 변환과 겹치는 일을 하곤 하지만, 대부분의
+ * 부분 코드 생성은 우리의 AST와 문자열 식별 코드를 다시 빼내는 것을 의미합니다.
  *
- * Code generators work several different ways, some compilers will reuse the
- * tokens from earlier, others will have created a separate representation of
- * the code so that they can print node linearly, but from what I can tell most
- * will use the same AST we just created, which is what we’re going to focus on.
+ * 코드 제너레이터는 여러가지 다른 방식으로 작동하며, 어떤 컴파일러는 이전과 다른 토큰을 재사용할 것이고,
+ * 다른 컴파일러는 노드를 선형적으로 출력할 수 있도록 코드의 별도 표현을 만들 것입니다. 그러나 여기서
+ * 말할 수 있는 것은 우리가 방금 만든 것과 동일한 AST를 사용하게 될 것이며, 이것이 우리가 집중해야 할
+ * 부분 입니다.
  *
- * Effectively our code generator will know how to “print” all of the different
- * node types of the AST, and it will recursively call itself to print nested
- * nodes until everything is printed into one long string of code.
+ * 효과적으로 우리의 코드 제너레이터는 AST의 모든 다양한 노드 유형을 "출력"하는 방법을 알게 될 것이며,
+ * 모든 것이 하나의 긴 코드 문자열로 인쇄될 때까지 중첩된 노드를 인쇄하기 위해 스스로를 재귀적으로 호출할
+ * 것입니다.
  */
 
 /**
- * And that's it! That's all the different pieces of a compiler.
+ * 이게 다입니다! 이것들을 조합하면 컴파일러가 됩니다.
  *
- * Now that isn’t to say every compiler looks exactly like I described here.
- * Compilers serve many different purposes, and they might need more steps than
- * I have detailed.
+ * 그렇다고 해서 모든 컴파일러들이 내가 여기서 말한 것과 똑같이 생겼다는 뜻은 아닙니다. 컴파일러는 여러 가지 
+ * 목적을 가지고 있으며, 여기서 상세히 설명한 것보다 더 많은 단계가 필요할지도 모릅니다.
  *
- * But now you should have a general high-level idea of what most compilers look
- * like.
+ * 그러나 이제 여러분들은 대부분의 컴파일러가 어떻게 생겼는지 대해 일반사람들보다 높은 수준의 생각을 
+ * 가져야 합니다.
  *
- * Now that I’ve explained all of this, you’re all good to go write your own
- * compilers right?
+ * 이제 모든것을 설명했으니까, 여러분들은 여러분들만의 컴파일러를 작성할 수 있습니다. 그렇죠?
  *
- * Just kidding, that's what I'm here to help with :P
+ * 농담입니다, 그것이 바로 이글을 작성한 이유니까요 :P
  *
- * So let's begin...
+ * 그러면 시작해 볼까요...
  */
 
 /**
@@ -367,59 +344,55 @@
  */
 
 /**
- * We're gonna start off with our first phase of parsing, lexical analysis, with
- * the tokenizer.
- *
- * We're just going to take our string of code and break it down into an array
- * of tokens.
+ * 우리는 첫번재 단계로 parsing, lexical analysis를 tokenizer를 이용하여 시작할 겁니다.
+ * 
+ * 우리는 앞에서 보았던 코드를 가지고 토큰의 배열로 분해할 것입니다.
  *
  *   (add 2 (subtract 4 2))   =>   [{ type: 'paren', value: '(' }, ...]
  */
 
-// We start by accepting an input string of code, and we're gonna set up two
-// things...
+// 코드 문자열을 받는것으로 부터 시작합니다.
+// 그리고 두가지 것들을 설정합니다.
 function tokenizer(input) {
 
-  // A `current` variable for tracking our position in the code like a cursor.
+  // `current` 변수는 위치를 추적합니다. 마치 커서처럼요.
   let current = 0;
 
-  // And a `tokens` array for pushing our tokens to.
+
+  // `tokens` 배열은 토큰들이 들어가는 배열입니다.
   let tokens = [];
 
-  // We start by creating a `while` loop where we are setting up our `current`
-  // variable to be incremented as much as we want `inside` the loop.
+  // `current` 변수를 내부에서 원하는 만큼 증가시키도록 설정하는 "while" 반목문을 만드는 것으로 
+  // 시작합니다.
   //
-  // We do this because we may want to increment `current` many times within a
-  // single loop because our tokens can be any length.
+  // 토큰의 길이가 어느 정도 될 수 있으므로 하나의 반복문 안에서 여러 번 `current`를 증가시키고자 
+  // 할 수도 있기 때문입니다.
   while (current < input.length) {
 
-    // We're also going to store the `current` character in the `input`.
+    // 현재 문자를 char에 저장합니다.
     let char = input[current];
 
-    // The first thing we want to check for is an open parenthesis. This will
-    // later be used for `CallExpression` but for now we only care about the
-    // character.
+    // 우리가 가장 먼저 확인하고 싶은 것은 개방된 괄호 입니다. 나중에 `CallExpression`에
+    // 쓰이겠지만 현재로스는 문자에만 신경을 쓰도록 하겠습니다.
     //
-    // We check to see if we have an open parenthesis:
+    // 개방된 괄호가 있는지 체크합니다:
     if (char === '(') {
 
-      // If we do, we push a new token with the type `paren` and set the value
-      // to an open parenthesis.
+      // 만약 if을 통과한다면 개방된 괄호는 `paren` type과 값을 새 토큰으로 정의합니다.
       tokens.push({
         type: 'paren',
         value: '(',
       });
 
-      // Then we increment `current`
+      // `current를 증가시킵니다`
       current++;
 
-      // And we `continue` onto the next cycle of the loop.
+      // `continue`를 통해 새로운 반복문을 시작합니다.
       continue;
     }
 
-    // Next we're going to check for a closing parenthesis. We do the same exact
-    // thing as before: Check for a closing parenthesis, add a new token,
-    // increment `current`, and `continue`.
+    // 다음으로 우리는 닫힌 괄호를 확인합니다. 우리는 이전과 같은 방법을 사용합니다: 닫힌 괄호를 확인하면
+    // 새로운 토큰을 추가하고 `current`를 증가시키고, `continue`를 실행합니다.
     if (char === ')') {
       tokens.push({
         type: 'paren',
@@ -429,83 +402,73 @@ function tokenizer(input) {
       continue;
     }
 
-    // Moving on, we're now going to check for whitespace. This is interesting
-    // because we care that whitespace exists to separate characters, but it
-    // isn't actually important for us to store as a token. We would only throw
-    // it out later.
+    // 이제 공백에 대해 확인해 볼 겁니다. 우리는 공백을 문자 분리를 위해 사용하지만, 실제로 토큰으로
+    // 저장하는 것은 중요하지 않습니다. 여기서는 공백은 거릅니다.
     //
-    // So here we're just going to test for existence and if it does exist we're
-    // going to just `continue` on.
+    // 따라서 여기서는 단지 공백인지 체크한 후, `continue`를 호출합니다.
     let WHITESPACE = /\s/;
     if (WHITESPACE.test(char)) {
       current++;
       continue;
     }
 
-    // The next type of token is a number. This is different than what we have
-    // seen before because a number could be any number of characters and we
-    // want to capture the entire sequence of characters as one token.
+    // 다음은 숫자 토큰 타입입니다. 이것은 앞에서 보았던 것과는 다릅니다. 왜냐하면 숫자는 어떤 숫자의
+    // 문자가 될 수 있기 때문이고 우리는 모든 숫자들을 하나의 숫자로 저장하기를 원합니다.
     //
     //   (add 123 456)
     //        ^^^ ^^^
-    //        Only two separate tokens
+    //        오직 2개의 토큰으로 분리되기를 원합니다.
     //
-    // So we start this off when we encounter the first number in a sequence.
+    // 따라서 우리는 숫자의 가장 첫부분을 만났을 때부터 시작합니다.
     let NUMBERS = /[0-9]/;
     if (NUMBERS.test(char)) {
 
-      // We're going to create a `value` string that we are going to push
-      // characters to.
+      // `value`변수는 문자들을 저장합니다.
       let value = '';
 
-      // Then we're going to loop through each character in the sequence until
-      // we encounter a character that is not a number, pushing each character
-      // that is a number to our `value` and incrementing `current` as we go.
+      // 이제 문자가 숫자가 아닐때까지 계속해서 `value`에 더하며 `current`값을 증가시킵니다.
       while (NUMBERS.test(char)) {
         value += char;
         char = input[++current];
       }
 
-      // After that we push our `number` token to the `tokens` array.
+      // 그 후, 완성된 `number` 토큰을 `tokens`배열에 넣습니다.
       tokens.push({ type: 'number', value });
 
-      // And we continue on.
+      // 계속 진행합니다.
       continue;
     }
 
-    // We'll also add support for strings in our language which will be any
-    // text surrounded by double quotes (").
+    // 우리는 또한 큰따옴표(")로 둘러쌓여진 텍스트 문자열도 지원해야합니다.
     //
     //   (concat "foo" "bar")
-    //            ^^^   ^^^ string tokens
+    //            ^^^   ^^^ 문자열 토큰들
     //
-    // We'll start by checking for the opening quote:
+    // 따옴표로 시작하는지 체크합니다:
     if (char === '"') {
-      // Keep a `value` variable for building up our string token.
+      // 문자열 토큰을 저장할 `value`변수를 만듭니다.
       let value = '';
 
-      // We'll skip the opening double quote in our token.
+      // 큰 따옴표는 무시합니다.
       char = input[++current];
 
-      // Then we'll iterate through each character until we reach another
-      // double quote.
+      // 큰 따옴표가 나오기 전까지 문자들을 저장합니다.
       while (char !== '"') {
         value += char;
         char = input[++current];
       }
 
-      // Skip the closing double quote.
+      // 닫는 큰따옴표는 무시합니다.
       char = input[++current];
 
-      // And add our `string` token to the `tokens` array.
+      // 완성된 `string` 토큰을 `tokens` 배열에 추가합니다.
       tokens.push({ type: 'string', value });
 
       continue;
     }
 
-    // The last type of token will be a `name` token. This is a sequence of
-    // letters instead of numbers, that are the names of functions in our lisp
-    // syntax.
+    // 마지막 토큰 타입은 `name` 입니다. 
+    // 이것은 숫자 대신 글자의 순서, 즉 우리의 lisp 구문에 있는 함수의 이름입니다.
     //
     //   (add 2 4)
     //    ^^^
@@ -515,25 +478,23 @@ function tokenizer(input) {
     if (LETTERS.test(char)) {
       let value = '';
 
-      // Again we're just going to loop through all the letters pushing them to
-      // a value.
+      // 계속 반복하면서 value에 문자들을 저장합니다.
       while (LETTERS.test(char)) {
         value += char;
         char = input[++current];
       }
 
-      // And pushing that value as a token with the type `name` and continuing.
+      // 그리고 value를 `name` 타입으로 저장한 후 계속 진행합니다.
       tokens.push({ type: 'name', value });
 
       continue;
     }
 
-    // Finally if we have not matched a character by now, we're going to throw
-    // an error and completely exit.
+    // 마지막으로, 매칭되지않는 문자들이 있다면, error를 던지고 완전히 종료합니다.
     throw new TypeError('I dont know what this character is: ' + char);
   }
 
-  // Then at the end of our `tokenizer` we simply return the tokens array.
+  // 그리고 `tokenizer`는 간단하게 tokens 배열을 반환하고 종료합니다.
   return tokens;
 }
 
@@ -545,44 +506,41 @@ function tokenizer(input) {
  */
 
 /**
- * For our parser we're going to take our array of tokens and turn it into an
- * AST.
+ * 우리들의 parser는, 토큰 배열을 가져다가 AST로 바꿉니다.
  *
  *   [{ type: 'paren', value: '(' }, ...]   =>   { type: 'Program', body: [...] }
  */
 
-// Okay, so we define a `parser` function that accepts our array of `tokens`.
+ // 자 이제 `tokens` 배열을 인자로 받는 `parser`를 정의합시다.
 function parser(tokens) {
 
-  // Again we keep a `current` variable that we will use as a cursor.
+  // `current` 변수는 위치를 저장하는 커서로 사용됩니다.
   let current = 0;
 
-  // But this time we're going to use recursion instead of a `while` loop. So we
-  // define a `walk` function.
+  // 그러나 여기서는 `while` 반복문 대신 재귀를 사용합니다. 그래서 우리는 `walk` 함수를 정의할
+  // 겁니다.
   function walk() {
 
-    // Inside the walk function we start by grabbing the `current` token.
+    // walk 함수 안에서 `current` 토큰을 가져와서 시작합니다.
     let token = tokens[current];
 
-    // We're going to split each type of token off into a different code path,
-    // starting off with `number` tokens.
+    // 우리는 `number` 토큰을 시작으로 각 토큰을 다른 코드 경로로 나눌 것입니다.
     //
-    // We test to see if we have a `number` token.
+    // `number` 토큰인지 확인합니다.
     if (token.type === 'number') {
 
-      // If we have one, we'll increment `current`.
+      // 만약 우리가 그 코튼을 가지고 있다면 `current`를 증가시킵니다.
       current++;
 
-      // And we'll return a new AST node called `NumberLiteral` and setting its
-      // value to the value of our token.
+      // 그리고 우리는 토큰 값과 `NumberLiteral`로 불리는 타입을 가진 새로운 AST노드를 반환
+      // 합니다.
       return {
         type: 'NumberLiteral',
         value: token.value,
       };
     }
 
-    // If we have a string we will do the same as number and create a
-    // `StringLiteral` node.
+    // 만약 우리가 문자열을 가지고 있다면 `StringLiteral` 노드를 만듭니다.
     if (token.type === 'string') {
       current++;
 
@@ -592,44 +550,38 @@ function parser(tokens) {
       };
     }
 
-    // Next we're going to look for CallExpressions. We start this off when we
-    // encounter an open parenthesis.
+    // 다음으로 우리는 CallExpressions을 찾을 겁니다. 이 작업은 열린 괄호를 만났을 때 실행 됩니다.
     if (
       token.type === 'paren' &&
       token.value === '('
     ) {
 
-      // We'll increment `current` to skip the parenthesis since we don't care
-      // about it in our AST.
+      // AST에서 괄호를 생략하도록 `current`를 증가시킵니다.
       token = tokens[++current];
 
-      // We create a base node with the type `CallExpression`, and we're going
-      // to set the name as the current token's value since the next token after
-      // the open parenthesis is the name of the function.
+      // `CallExpression` 타입의 기본 노드를 만듭니다. 그리고 열린 괄호 뒤에 있는 토큰이
+      // 함수의 이름이기 때문에 현재 토큰의 값으로 설정합니다.
       let node = {
         type: 'CallExpression',
         name: token.value,
         params: [],
       };
 
-      // We increment `current` *again* to skip the name token.
+      // 이제 이름 토큰을 건너뛰기 위해서 `current`를 증가시킵니다. 
       token = tokens[++current];
 
-      // And now we want to loop through each token that will be the `params` of
-      // our `CallExpression` until we encounter a closing parenthesis.
+      // 그리고 이제 우리는 닫힌 괄호를 만날 때까지 각각의 코튼들이 `CallExpression`의 `params`이
+      // 되도록 순회하고자 한다.\
       //
-      // Now this is where recursion comes in. Instead of trying to parse a
-      // potentially infinitely nested set of nodes we're going to rely on
-      // recursion to resolve things.
+      // 이제 재귀안으로 들어가 보자. 무한히 중첩될 수 있는 노드 집합을 분석하려고 시도하는 대신, 
+      // 문제를 해결하기 위해 재귀 작업에 의존할 겁니다.
       //
-      // To explain this, let's take our Lisp code. You can see that the
-      // parameters of the `add` are a number and a nested `CallExpression` that
-      // includes its own numbers.
+      // 이것에 대해 설명하기 위해서, Lisp 코드를 가져와보자. 여러분들은 addd 내부에 포함된
+      // 숫자들과 `CallExpression`을 볼 수 있을 것입니다.
       //
       //   (add 2 (subtract 4 2))
       //
-      // You'll also notice that in our tokens array we have multiple closing
-      // parenthesis.
+      // 여러분들은 또한 여러개의 닫힌 괄호를 가지고 있다는 것도 눈치 챘을 것입니다.
       //
       //   [
       //     { type: 'paren',  value: '('        },
@@ -639,51 +591,47 @@ function parser(tokens) {
       //     { type: 'name',   value: 'subtract' },
       //     { type: 'number', value: '4'        },
       //     { type: 'number', value: '2'        },
-      //     { type: 'paren',  value: ')'        }, <<< Closing parenthesis
-      //     { type: 'paren',  value: ')'        }, <<< Closing parenthesis
+      //     { type: 'paren',  value: ')'        }, <<< 닫힌 괄호
+      //     { type: 'paren',  value: ')'        }, <<< 닫힌 괄호
       //   ]
       //
-      // We're going to rely on the nested `walk` function to increment our
-      // `current` variable past any nested `CallExpression`.
+      //
+      // 우리는 중첩된 `walk` 함수에 의존하여 중첩된 CallExpression을 넘어 `current` 변수를
+      // 증가시킬 것입니다.
 
-      // So we create a `while` loop that will continue until it encounters a
-      // token with a `type` of `'paren'` and a `value` of a closing
-      // parenthesis.
+      // 따라서 우리는 `paren` 타입과 닫힌 괄호의 `value`를 가진 토큰을 만날 때까지 반복되는
+      // `while` 반복문을 만들 것입니다.
       while (
         (token.type !== 'paren') ||
         (token.type === 'paren' && token.value !== ')')
       ) {
-        // we'll call the `walk` function which will return a `node` and we'll
-        // push it into our `node.params`.
+
+        // `walk` 함수를 호출한 후 반횐되는 `node`를 `node.params`에 넣습니다.
         node.params.push(walk());
         token = tokens[current];
       }
 
-      // Finally we will increment `current` one last time to skip the closing
-      // parenthesis.
+      // 마지막으로 우리는 `current`를 증가시켜 닫힌 괄호를 생략합니다.
       current++;
 
-      // And return the node.
+      // 그리고 node를 반환합니다.
       return node;
     }
 
-    // Again, if we haven't recognized the token type by now we're going to
-    // throw an error.
+    // 다시 말씀드리지만, 토큰의 종류를 인식하지 못했을 경우, error를 던집니다.
     throw new TypeError(token.type);
   }
 
-  // Now, we're going to create our AST which will have a root which is a
-  // `Program` node.
+  // 이제, 우리들은 `Program`을 노드로 갖는 새로운 AST를 만들었습니다.
   let ast = {
     type: 'Program',
     body: [],
   };
 
-  // And we're going to kickstart our `walk` function, pushing nodes to our
-  // `ast.body` array.
+  // 그리고 우리는 `walk`함수를 이용하여 `ast.body` 함수를 빠르게 채워나갈 수 있습니다. 
   //
-  // The reason we are doing this inside a loop is because our program can have
-  // `CallExpression` after one another instead of being nested.
+  // 반복문 안에서 하는 이유는 우리 프로그램이 중첩이 아닌 `CallExpression`를 연달아 가질
+  // 수 있기 때문입니다.
   //
   //   (add 2 2)
   //   (subtract 4 2)
@@ -692,7 +640,7 @@ function parser(tokens) {
     ast.body.push(walk());
   }
 
-  // At the end of our parser we'll return the AST.
+  // 마지막으로 ast를 반환합니다.
   return ast;
 }
 
@@ -704,9 +652,8 @@ function parser(tokens) {
  */
 
 /**
- * So now we have our AST, and we want to be able to visit different nodes with
- * a visitor. We need to be able to call the methods on the visitor whenever we
- * encounter a node with a matching type.
+ * 우리는 이제 AST를 가지고 visitor와 함께 다른 노드를 방문하려고 합니다. 우리는 일치하는 유형의
+ * 노드를 만날 때마다 visitor에 대해 메서드를 호출할 수 있어야 합니다.
  *
  *   traverse(ast, {
  *     Program: {
@@ -738,71 +685,66 @@ function parser(tokens) {
  *   });
  */
 
-// So we define a traverser function which accepts an AST and a
-// visitor. Inside we're going to define two functions...
+ // 따라서 우리는 AST를 순회하는 함수를 정의합니다. 이 함수 안에 두 함수를
+ // 정의할 것입니다.
 function traverser(ast, visitor) {
 
-  // A `traverseArray` function that will allow us to iterate over an array and
-  // call the next function that we will define: `traverseNode`.
+  // `traverseArray` 함수는 배열로 반복할 수 있는 함수이며, 다음에 정의될 함수를 
+  // 호출합니다: `traverseNode`.
   function traverseArray(array, parent) {
     array.forEach(child => {
       traverseNode(child, parent);
     });
   }
 
-  // `traverseNode` will accept a `node` and its `parent` node. So that it can
-  // pass both to our visitor methods.
+  // `traverseNode`는 `node`와 그것의 `perent`노드를 받습니다. 따라서 visitor 매서드들을 모두
+  // 넘길 수 있습니다.
   function traverseNode(node, parent) {
 
-    // We start by testing for the existence of a method on the visitor with a
-    // matching `type`.
+    // 우리는 먼저 visitor에 대한 메서드의 존재 여부를 'type'을 테스트하는것으로 시작합니다.
     let methods = visitor[node.type];
 
-    // If there is an `enter` method for this node type we'll call it with the
-    // `node` and its `parent`.
+    // 이 노드 타입에 대한 `enter` 메서드가 있다면 `node`와 `parent`와 함께 호출할 것입니다.
     if (methods && methods.enter) {
       methods.enter(node, parent);
     }
 
-    // Next we are going to split things up by the current node type.
+    // 다음으로 현재 노드들을 유형별로 구분합니다.
     switch (node.type) {
 
-      // We'll start with our top level `Program`. Since Program nodes have a
-      // property named body that has an array of nodes, we will call
-      // `traverseArray` to traverse down into them.
+      // 우리는 최상위 경로인 `Program`에서 시작합니다. Program 노드들은 노드들의 배열을 가지고
+      // 있는 body라는 속성을 가지고 있기 때문에, 우리는 `traverseArray`를 호출하여 그들을
+      // 순회할 것입니다.
       //
-      // (Remember that `traverseArray` will in turn call `traverseNode` so  we
-      // are causing the tree to be traversed recursively)
+      // (`traverseArray`는 `traverseNode`를 호출하므로, 따라서 우리는 트리를 재귀적으로 돌고 
+      // 있다는 것을 기억해야합니다)
       case 'Program':
         traverseArray(node.body, node);
         break;
 
-      // Next we do the same with `CallExpression` and traverse their `params`.
+      // 다음으로 `CallExpression`는 `params`과 함께 똑같은 작업을 합니다.
       case 'CallExpression':
         traverseArray(node.params, node);
         break;
-
-      // In the cases of `NumberLiteral` and `StringLiteral` we don't have any
-      // child nodes to visit, so we'll just break.
+      // `NumberLiteral`과 `StringLiteral`의 경우 방문해야할 자식 노드가 없으므로 넘어
+      // 갑니다.
       case 'NumberLiteral':
       case 'StringLiteral':
         break;
 
-      // And again, if we haven't recognized the node type then we'll throw an
-      // error.
+      // 노드 타입을 인식할수 없다면, error를 던집니다.
       default:
         throw new TypeError(node.type);
     }
 
-    // If there is an `exit` method for this node type we'll call it with the
-    // `node` and its `parent`.
+    // 만약 'exit' 메서드가 존재한다면, `node`와 `parent`와 함께 호출합니다.
     if (methods && methods.exit) {
       methods.exit(node, parent);
     }
   }
 
-  // Finally we kickstart the traverser by calling `traverseNode` with our ast
-  // with no `parent` because the top level of the AST doesn't have a parent.
+  // 마지막으로 traverser 함수는 `parent`가 없는 ast와 함쎄 `traverseNode`를 호출합니다.
+  // 왜냐하면 최상위 AST는 부모를 가지고 있지 않기 때문입니다.
   traverseNode(ast, null);
 }
 
@@ -814,9 +756,8 @@ function traverser(ast, visitor) {
  */
 
 /**
- * Next up, the transformer. Our transformer is going to take the AST that we
- * have built and pass it to our traverser function with a visitor and will
- * create a new ast.
+ * 다음으로, transformer입니다. transformer는 AST를 가지고 visitor와 함께 새로운 ast를 
+ * 만들 것입니다. 
  *
  * ----------------------------------------------------------------------------
  *   Original AST                     |   Transformed AST
@@ -847,18 +788,17 @@ function traverser(ast, visitor) {
  *                                    |             type: 'NumberLiteral',
  *                                    |             value: '2'
  *                                    |           }]
- *  (sorry the other one is longer.)  |         }
+ *  (죄송하지만 너무 길어서 생략합니다. )      |         }
  *                                    |       }
  *                                    |     }]
  *                                    |   }
  * ----------------------------------------------------------------------------
  */
 
-// So we have our transformer function which will accept the lisp ast.
+// 따라서 transformer 함수는 lisp ast를 받습니다. 
 function transformer(ast) {
 
-  // We'll create a `newAst` which like our previous AST will have a program
-  // node.
+  // 이전 AST와 마찬가지로 Program 노드를 갖는 newAst를 만들 것입니다.
   let newAst = {
     type: 'Program',
     body: [],
@@ -873,15 +813,14 @@ function transformer(ast) {
   // new ast.
   ast._context = newAst.body;
 
-  // We'll start by calling the traverser function with our ast and a visitor.
+  // 우리는 ast 그리고 visitor와 함께 traverser 함수를 호출하면서 시작합니다.
   traverser(ast, {
 
-    // The first visitor method accepts any `NumberLiteral`
+    // 첫번째 visitor 메서드는 `NumberLiteral` 입니다.
     NumberLiteral: {
-      // We'll visit them on enter.
+      // 방문할때 메서드를 정의합니다.
       enter(node, parent) {
-        // We'll create a new node also named `NumberLiteral` that we will push to
-        // the parent context.
+        // `NumberLiteral` 이름의 새 노드를 만든 후 부모의 context에 추가합니다.
         parent._context.push({
           type: 'NumberLiteral',
           value: node.value,
@@ -889,7 +828,7 @@ function transformer(ast) {
       },
     },
 
-    // Next we have `StringLiteral`
+    // 다음으로 `StringLiteral` 입니다.
     StringLiteral: {
       enter(node, parent) {
         parent._context.push({
@@ -899,7 +838,7 @@ function transformer(ast) {
       },
     },
 
-    // Next up, `CallExpression`.
+    // 다음은 `CallExpression`.
     CallExpression: {
       enter(node, parent) {
 
@@ -939,8 +878,7 @@ function transformer(ast) {
     }
   });
 
-  // At the end of our transformer function we'll return the new ast that we
-  // just created.
+  // transformer 함수가 새로운 newAst를 반환함으로써 완성됩니다.
   return newAst;
 }
 
@@ -952,35 +890,32 @@ function transformer(ast) {
  */
 
 /**
- * Now let's move onto our last phase: The Code Generator.
+ * 이제 마지막 단계로 넘어갑시다: 코드 제너레이터.
  *
- * Our code generator is going to recursively call itself to print each node in
- * the tree into one giant string.
+ * 코드제너레이터는 재귀적으로 호출하여 트리의 각 노드들을 하나의 거대한 문자열로 출력할 것입니다.
  */
 
 function codeGenerator(node) {
 
-  // We'll break things down by the `type` of the `node`.
+  // `node`의 타입에 따라 진행합니다.
   switch (node.type) {
 
-    // If we have a `Program` node. We will map through each node in the `body`
-    // and run them through the code generator and join them with a newline.
+    // `Program` 노드일 경우입니다. `body`의 각 노드를 맵으로 돌면서 코드 제너레이터를 거치면서
+    // 새로운 줄로 합칩니다.
     case 'Program':
       return node.body.map(codeGenerator)
         .join('\n');
 
-    // For `ExpressionStatement` we'll call the code generator on the nested
-    // expression and we'll add a semicolon...
+    // `ExpressionStatement`의 경우, 중첩된 코드 제네레이터를 호출합니다. 그리고 세미콜론을
+    // 추가합니다...
     case 'ExpressionStatement':
       return (
         codeGenerator(node.expression) +
-        ';' // << (...because we like to code the *correct* way)
+        ';' // << (...우리는 *올바른* 방식으로 코드화 하려하기 때문입니다)
       );
 
-    // For `CallExpression` we will print the `callee`, add an open
-    // parenthesis, we'll map through each node in the `arguments` array and run
-    // them through the code generator, joining them with a comma, and then
-    // we'll add a closing parenthesis.
+    // `CallExpression`의 경우, `callee`를 출력한 후 괄호를 열고, `arguments`를 맵으로
+    // 돌면서 코드 제네레이터를 통과시킨 후, 콤마와 함께 join한후 괄호를 닫습니다.
     case 'CallExpression':
       return (
         codeGenerator(node.callee) +
@@ -990,19 +925,19 @@ function codeGenerator(node) {
         ')'
       );
 
-    // For `Identifier` we'll just return the `node`'s name.
+    // `Identifier`의 경우 `node`의 이름을 반환합니다.
     case 'Identifier':
       return node.name;
 
-    // For `NumberLiteral` we'll just return the `node`'s value.
+    // `NumberLiteral`의 경우, `node`의 값을 반환합니다.
     case 'NumberLiteral':
       return node.value;
 
-    // For `StringLiteral` we'll add quotations around the `node`'s value.
+    // `StringLiteral`의 경우, 큰 따옴표로 둘러쌓인 `node`의 값을 반환합니다.
     case 'StringLiteral':
       return '"' + node.value + '"';
 
-    // And if we haven't recognized the node, we'll throw an error.
+    // 그리고 노드로 인식하지 못한 결우에, error를 던집니다.
     default:
       throw new TypeError(node.type);
   }
@@ -1016,8 +951,8 @@ function codeGenerator(node) {
  */
 
 /**
- * FINALLY! We'll create our `compiler` function. Here we will link together
- * every part of the pipeline.
+ * 마침내! 우리는 '컴파일러' 함수를 만들 것입니다. 여기에 우리가 만든 모든 것들을 파이프라인으로
+ * 연결합니다.
  *
  *   1. input  => tokenizer   => tokens
  *   2. tokens => parser      => ast
@@ -1031,18 +966,18 @@ function compiler(input) {
   let newAst = transformer(ast);
   let output = codeGenerator(newAst);
 
-  // and simply return the output!
+  // 그리고 output을 리턴합니다
   return output;
 }
 
 /**
  * ============================================================================
  *                                   (๑˃̵ᴗ˂̵)و
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!YOU MADE IT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!여러분이 만든거에요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * ============================================================================
  */
 
-// Now I'm just exporting everything...
+// 이제 모든것을 exports 합니다...
 module.exports = {
   tokenizer,
   parser,
