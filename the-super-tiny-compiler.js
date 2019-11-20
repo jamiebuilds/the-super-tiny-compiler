@@ -380,7 +380,8 @@
 // things...
 function tokenizer(p_input) {
 
-  let input = p_input + ' ';
+  //Fixes an infinite loop where the file ends before certain while loops end.
+  let input = p_input + ' '; 
   // A `current` variable for tracking our position in the code like a cursor.
   let current = 0;
 
