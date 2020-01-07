@@ -333,7 +333,7 @@
  *
  * Code generators work several different ways, some compilers will reuse the
  * tokens from earlier, others will have created a separate representation of
- * the code so that they can print node linearly, but from what I can tell most
+ * the code so that they can print nodes linearly, but from what I can tell most
  * will use the same AST we just created, which is what we’re going to focus on.
  *
  * Effectively our code generator will know how to “print” all of the different
