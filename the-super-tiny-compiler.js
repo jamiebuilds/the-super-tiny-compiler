@@ -495,7 +495,7 @@ function tokenizer(input) {
       }
 
       // Skip the closing double quote.
-      char = input[++current];
+      ++current;
 
       // And add our `string` token to the `tokens` array.
       tokens.push({ type: 'string', value });
