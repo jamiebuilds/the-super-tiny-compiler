@@ -420,7 +420,7 @@ function tokenizer(input) {
     // Next we're going to check for a closing parenthesis. We do the same exact
     // thing as before: Check for a closing parenthesis, add a new token,
     // increment `current`, and `continue`.
-    if (char === ')') {
+    else if (char === ')') {
       tokens.push({
         type: 'paren',
         value: ')',
@@ -436,8 +436,7 @@ function tokenizer(input) {
     //
     // So here we're just going to test for existence and if it does exist we're
     // going to just `continue` on.
-    let WHITESPACE = /\s/;
-    if (WHITESPACE.test(char)) {
+    else if (/\s/.test(char)) {
       current++;
       continue;
     }
@@ -451,8 +450,7 @@ function tokenizer(input) {
     //        Only two separate tokens
     //
     // So we start this off when we encounter the first number in a sequence.
-    let NUMBERS = /[0-9]/;
-    if (NUMBERS.test(char)) {
+    else if (/[0-9]/.test(char)) {
 
       // We're going to create a `value` string that we are going to push
       // characters to.
@@ -480,7 +478,7 @@ function tokenizer(input) {
     //            ^^^   ^^^ string tokens
     //
     // We'll start by checking for the opening quote:
-    if (char === '"') {
+    else if (char === '"') {
       // Keep a `value` variable for building up our string token.
       let value = '';
 
@@ -511,13 +509,12 @@ function tokenizer(input) {
     //    ^^^
     //    Name token
     //
-    let LETTERS = /[a-z]/i;
-    if (LETTERS.test(char)) {
+    else if (/[a-z]/i.test(char)) {
       let value = '';
 
       // Again we're just going to loop through all the letters pushing them to
       // a value.
-      while (LETTERS.test(char)) {
+      while (char && /[a-z]/i.test(char)) {
         value += char;
         char = input[++current];
       }
@@ -526,16 +523,18 @@ function tokenizer(input) {
       tokens.push({ type: 'name', value });
 
       continue;
+    } else {
+      current ++;
     }
-
     // Finally if we have not matched a character by now, we're going to throw
     // an error and completely exit.
-    throw new TypeError('I dont know what this character is: ' + char);
+    // throw new TypeError('I dont know what this character is: ' + char);
   }
 
   // Then at the end of our `tokenizer` we simply return the tokens array.
   return tokens;
 }
+
 
 /**
  * ============================================================================
