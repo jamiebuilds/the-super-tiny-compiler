@@ -461,7 +461,7 @@ function tokenizer(input) {
       // Then we're going to loop through each character in the sequence until
       // we encounter a character that is not a number, pushing each character
       // that is a number to our `value` and incrementing `current` as we go.
-      while (NUMBERS.test(char)) {
+      while (current < input.length && NUMBERS.test(char)) {
         value += char;
         char = input[++current];
       }
@@ -484,18 +484,29 @@ function tokenizer(input) {
       // Keep a `value` variable for building up our string token.
       let value = '';
 
-      // We'll skip the opening double quote in our token.
-      char = input[++current];
+      // Check closed double quote 
+      if (current < input.length - 1) {
 
-      // Then we'll iterate through each character until we reach another
-      // double quote.
-      while (char !== '"') {
-        value += char;
+        // We'll skip the opening double quote in our token.
         char = input[++current];
-      }
 
-      // Skip the closing double quote.
-      char = input[++current];
+        // Then we'll iterate through each character until we reach another
+        // double quote.
+        while (char !== '"') {
+          value += char;
+          char = input[++current];
+        }
+
+        // Check closed double quote 
+        if (char !== '"') {
+          throw new Error('invalid string with no closed "');
+        }
+
+        // Skip the closing double quote.
+        char = input[++current];
+      } else {
+        throw new Error('invalid string with no closed "');
+      }
 
       // And add our `string` token to the `tokens` array.
       tokens.push({ type: 'string', value });
@@ -517,7 +528,7 @@ function tokenizer(input) {
 
       // Again we're just going to loop through all the letters pushing them to
       // a value.
-      while (LETTERS.test(char)) {
+      while (current < input.length && LETTERS.test(char)) {
         value += char;
         char = input[++current];
       }
