@@ -530,7 +530,7 @@ function tokenizer(input) {
 
     // Finally if we have not matched a character by now, we're going to throw
     // an error and completely exit.
-    throw new TypeError('I dont know what this character is: ' + char);
+    throw new TypeError('I don\'t know what this character is: ' + char);
   }
 
   // Then at the end of our `tokenizer` we simply return the tokens array.
