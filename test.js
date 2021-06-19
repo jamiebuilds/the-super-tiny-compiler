@@ -1,11 +1,11 @@
-const {
+import {
   tokenizer,
   parser,
   transformer,
   codeGenerator,
   compiler,
-} = require('./the-super-tiny-compiler');
-const assert = require('assert');
+} from './the-super-tiny-compiler.js';
+import assert from 'assert/strict';
 
 const input  = '(add 2 (subtract 4 2))';
 const output = 'add(2, subtract(4, 2));';

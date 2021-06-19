@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * TTTTTTTTTTTTTTTTTTTTTTTHHHHHHHHH     HHHHHHHHHEEEEEEEEEEEEEEEEEEEEEE
  * T:::::::::::::::::::::TH:::::::H     H:::::::HE::::::::::::::::::::E
@@ -1043,7 +1041,7 @@ function compiler(input) {
  */
 
 // Now I'm just exporting everything...
-module.exports = {
+export {
   tokenizer,
   parser,
   traverser,
