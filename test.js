@@ -4,7 +4,7 @@ import {
   transformer,
   codeGenerator,
   compiler,
-} from './the-super-tiny-compiler.ja';
+} from './the-super-tiny-compiler.js';
 import assert from 'assert/strict';
 
 const input  = '(add 2 (subtract 4 2))';
