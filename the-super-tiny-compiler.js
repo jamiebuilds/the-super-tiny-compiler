@@ -436,7 +436,7 @@ function tokenizer(input) {
     //
     // So here we're just going to test for existence and if it does exist we're
     // going to just `continue` on.
-    let WHITESPACE = /\s/;
+    const WHITESPACE = /\s/;
     if (WHITESPACE.test(char)) {
       current++;
       continue;
@@ -451,7 +451,7 @@ function tokenizer(input) {
     //        Only two separate tokens
     //
     // So we start this off when we encounter the first number in a sequence.
-    let NUMBERS = /[0-9]/;
+    const NUMBERS = /[0-9]/;
     if (NUMBERS.test(char)) {
 
       // We're going to create a `value` string that we are going to push
@@ -511,7 +511,7 @@ function tokenizer(input) {
     //    ^^^
     //    Name token
     //
-    let LETTERS = /[a-z]/i;
+    const LETTERS = /[a-z]/i;
     if (LETTERS.test(char)) {
       let value = '';
 
