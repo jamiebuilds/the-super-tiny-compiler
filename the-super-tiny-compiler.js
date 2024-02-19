@@ -98,6 +98,25 @@
  * Well good, because this is exactly what we are going to compile. While this
  * is neither a complete LISP or C syntax, it will be enough of the syntax to
  * demonstrate many of the major pieces of a modern compiler.
+ * 
+ * 今天我们将一起编写一个编译器，一个超级小巧的编译器！  
+ * 去除所有注释后，这个文件的实际代码行数将只有大约200行。  
+ *  
+ * 我们将把类似Lisp的函数调用编译成类似C的函数调用。  
+ *  
+ * 如果你不熟悉其中一种或两种语言，下面是一个简短的介绍。  
+ *  
+ * 假设我们有两个函数 `add` 和 `subtract`，它们的写法如下：  
+ *  
+ * Lisp 语法                       C 语法  
+ * (add 2 2)                       add(2, 2)  
+ * (subtract 4 2)                 subtract(4, 2)  
+ * (add 2 (subtract 4 2))         add(2, subtract(4, 2))  
+ *  
+ * 是不是很简单？  
+ *  
+ * 很好，因为这正是我们要编译的内容。虽然这既不是完整的Lisp也不是C语法，  
+ * 但它将足以展示现代编译器的许多核心组件。 
  */
 
 /**
@@ -112,10 +131,20 @@
  *
  * 3. *Code Generation* takes the transformed representation of the code and
  *    turns it into new code.
+ * 
+ * 
+ * 大多数编译器可以分为三个主要阶段：解析（Parsing）、转换（Transformation）和代码生成（Code Generation）。  
+ *  
+ * 1. *解析* 是将原始代码转换为代码的更抽象表示。  
+ *  
+ * 2. *转换* 对这个抽象表示进行操作，以实现编译器希望其执行的任何操作。  
+ *  
+ * 3. *代码生成* 将已转换的代码表示转换为新代码。
  */
 
 /**
  * Parsing
+ * 解析（Parsing）  
  * -------
  *
  * Parsing typically gets broken down into two phases: Lexical Analysis and
@@ -137,11 +166,23 @@
  *    represents code in a way that is both easy to work with and tells us a lot
  *    of information.
  *
+ * 解析通常被细分为两个阶段：词法分析（Lexical Analysis）和语法分析（Syntactic Analysis）。  
+ *  
+ * 1. *词法分析* 通过词法分析器（也称为词法分析器或分词器）将原始代码拆分为称为标记（tokens）的单元。  
+ *  
+ *    标记是一个包含描述语法孤立片段的小对象的数组。它们可以是数字、标签、标点符号、操作符等。  
+ *  
+ * 2. *语法分析* 将标记重新组合成描述语法各个部分及其相互关系的表示形式。这被称为中间表示或抽象语法树（AST）。  
+ *  
+ *    抽象语法树（AST）是一个深度嵌套的对象，以易于处理的方式表示代码，并提供了大量信息。  
+ *  
  * For the following syntax:
+ * 对于以下语法： 
  *
  *   (add 2 (subtract 4 2))
  *
  * Tokens might look something like this:
+ * 标记可能如下所示： 
  *
  *   [
  *     { type: 'paren',  value: '('        },
@@ -156,6 +197,7 @@
  *   ]
  *
  * And an Abstract Syntax Tree (AST) might look like this:
+ * 而一个抽象语法树（AST）可能如下所示：  
  *
  *   {
  *     type: 'Program',
@@ -178,25 +220,34 @@
  *       }]
  *     }]
  *   }
+ * 
+ * 
+ * 
  */
 
 /**
  * Transformation
+ * 转换（Transformation）  
  * --------------
  *
  * The next type of stage for a compiler is transformation. Again, this just
  * takes the AST from the last step and makes changes to it. It can manipulate
  * the AST in the same language or it can translate it into an entirely new
  * language.
+ * 编译器的下一个阶段是转换。这个阶段同样基于上一步生成的AST，并对其进行修改。它可以在同一语言内操作AST，也可以将其转换为全新的语言。  
+ * 
  *
  * Let’s look at how we would transform an AST.
+ * 让我们看看如何转换AST。 
  *
  * You might notice that our AST has elements within it that look very similar.
  * There are these objects with a type property. Each of these are known as an
  * AST Node. These nodes have defined properties on them that describe one
  * isolated part of the tree.
- *
+ * 你可能会注意到，我们的AST中包含了一些看起来非常相似的元素。这些都是具有type属性的对象。每个这样的对象都被称为AST节点（ASTNode）。这些节点定义了描述树中独立部分的属性。  
+ *  
  * We can have a node for a "NumberLiteral":
+ * 我们可以有一个“NumberLiteral”节点：
  *
  *   {
  *     type: 'NumberLiteral',
@@ -204,6 +255,7 @@
  *   }
  *
  * Or maybe a node for a "CallExpression":
+ * 或者一个“CallExpression”节点： 
  *
  *   {
  *     type: 'CallExpression',
@@ -215,17 +267,21 @@
  * adding/removing/replacing properties, we can add new nodes, remove nodes, or
  * we could leave the existing AST alone and create an entirely new one based
  * on it.
- *
+ * 在转换AST时，我们可以通过添加/删除/替换属性来操作节点，可以添加新节点，删除节点，或者基于现有AST创建一个全新的AST。  
+ *  
  * Since we’re targeting a new language, we’re going to focus on creating an
  * entirely new AST that is specific to the target language.
- *
+ * 由于我们针对的是新语言，我们将专注于创建一个特定于目标语言的全新AST。  
+ *  
  * Traversal
+ * 遍历（Traversal） 
  * ---------
  *
  * In order to navigate through all of these nodes, we need to be able to
  * traverse through them. This traversal process goes to each node in the AST
  * depth-first.
- *
+ * 为了遍历所有这些节点，我们需要能够访问它们。这个遍历过程将按照深度优先顺序访问AST中的每个节点。  
+ *  
  *   {
  *     type: 'Program',
  *     body: [{
@@ -249,26 +305,40 @@
  *   }
  *
  * So for the above AST we would go:
+ * 因此，对于上述AST，我们将按照以下顺序遍历：  
  *
  *   1. Program - Starting at the top level of the AST
+ *      Program - 从AST的顶层开始  
  *   2. CallExpression (add) - Moving to the first element of the Program's body
+ *      CallExpression (add) - 移动到Program主体的第一个元素  
  *   3. NumberLiteral (2) - Moving to the first element of CallExpression's params
+ *      NumberLiteral (2) - 移动到CallExpression参数的第一个元素 
  *   4. CallExpression (subtract) - Moving to the second element of CallExpression's params
+ *      CallExpression (subtract) - 移动到CallExpression参数的第二个元素  
  *   5. NumberLiteral (4) - Moving to the first element of CallExpression's params
+ *      NumberLiteral (4) - 移动到CallExpression参数的第一个元素  
  *   6. NumberLiteral (2) - Moving to the second element of CallExpression's params
+ *      NumberLiteral (2) - 移动到CallExpression参数的第二个元素  
  *
  * If we were manipulating this AST directly, instead of creating a separate AST,
  * we would likely introduce all sorts of abstractions here. But just visiting
  * each node in the tree is enough for what we're trying to do.
+ * 如果我们直接操作这个AST，而不是创建一个单独的AST，  
+ * 我们可能会在这里引入各种抽象。但对于我们想要做的事情来说，  
+ * 仅访问树中的每个节点就足够了
  *
  * The reason I use the word "visiting" is because there is this pattern of how
  * to represent operations on elements of an object structure.
+ * 我使用“访问”这个词是因为有一个如何在对象结构的元素上表示操作的模式。 
  *
  * Visitors
+ * 访问者（Visitors ）
  * --------
  *
  * The basic idea here is that we are going to create a “visitor” object that
  * has methods that will accept different node types.
+ * 基本思想是我们将创建一个“访问者”对象，该对象将包含接受不同节点类型的方法。  
+ *  
  *
  *   var visitor = {
  *     NumberLiteral() {},
@@ -277,9 +347,11 @@
  *
  * When we traverse our AST, we will call the methods on this visitor whenever we
  * "enter" a node of a matching type.
- *
+ * 当我们遍历我们的AST时，我们将调用此访问者上的方法，每当我们“进入”一个匹配类型的节点时。  
+ *  
  * In order to make this useful we will also pass the node and a reference to
  * the parent node.
+ * 为了使这变得有用，我们还将传递节点和对父节点的引用。 
  *
  *   var visitor = {
  *     NumberLiteral(node, parent) {},
@@ -288,7 +360,8 @@
  *
  * However, there also exists the possibility of calling things on "exit". Imagine
  * our tree structure from before in list form:
- *
+ * 然而，也存在“退出”时调用东西的可能性。想象一下我们之前的树结构以列表形式表示：  
+ *  
  *   - Program
  *     - CallExpression
  *       - NumberLiteral
@@ -299,7 +372,8 @@
  * As we traverse down, we're going to reach branches with dead ends. As we
  * finish each branch of the tree we "exit" it. So going down the tree we
  * "enter" each node, and going back up we "exit".
- *
+ * 当我们向下遍历时，我们将达到有死路的分支。当我们完成树的每个分支时，我们会“退出”它。因此，在向下遍历树时，我们“进入”每个节点，而在向上返回时，我们“退出”。  
+ *  
  *   -> Program (enter)
  *     -> CallExpression (enter)
  *       -> Number Literal (enter)
@@ -314,7 +388,8 @@
  *   <- Program (exit)
  *
  * In order to support that, the final form of our visitor will look like this:
- *
+ * 为了支持这一点，访问者的最终形式将如下所示：
+ * 
  *   var visitor = {
  *     NumberLiteral: {
  *       enter(node, parent) {},
@@ -325,20 +400,29 @@
 
 /**
  * Code Generation
+ * 代码生成
  * ---------------
  *
  * The final phase of a compiler is code generation. Sometimes compilers will do
  * things that overlap with transformation, but for the most part code
  * generation just means take our AST and string-ify code back out.
- *
+ * 编译器的最后阶段是代码生成。有时，编译器会执行与转换重叠的操作，
+ * 但大多数情况下，代码生成只是指将我们的AST转换回字符串形式的代码。  
+ *  
+ * 
  * Code generators work several different ways, some compilers will reuse the
  * tokens from earlier, others will have created a separate representation of
  * the code so that they can print nodes linearly, but from what I can tell most
  * will use the same AST we just created, which is what we’re going to focus on.
- *
+ * 代码生成器的工作方式各不相同，有些编译器会重用早期的令牌，而其他编译器则会创建代码的单独表示形式，
+ * 以便它们可以线性地打印节点，但据我所知，大多数编译器将使用我们刚刚创建的相同的AST，这将是我们的重点。  
+ *  
  * Effectively our code generator will know how to “print” all of the different
  * node types of the AST, and it will recursively call itself to print nested
  * nodes until everything is printed into one long string of code.
+ * 实际上，我们的代码生成器将知道如何“打印”AST的所有不同节点类型，
+ * 并且它将递归调用自身以打印嵌套节点，直到所有内容都被打印为一个长的代码字符串。 
+ *  
  */
 
 /**
@@ -1027,7 +1111,7 @@ function codeGenerator(node) {
 
 function compiler(input) {
   let tokens = tokenizer(input);
-  let ast    = parser(tokens);
+  let ast = parser(tokens);
   let newAst = transformer(ast);
   let output = codeGenerator(newAst);
 
