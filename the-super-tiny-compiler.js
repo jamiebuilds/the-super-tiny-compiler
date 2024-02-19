@@ -427,18 +427,24 @@
 
 /**
  * And that's it! That's all the different pieces of a compiler.
+ * 就是这样! 这就是编译器的所有不同部分。
  *
  * Now that isn’t to say every compiler looks exactly like I described here.
  * Compilers serve many different purposes, and they might need more steps than
  * I have detailed.
- *
+ * 这并不意味着每个编译器都与我这里描述的完全相同。  
+ * 编译器服务于许多不同的目的，它们可能需要比我详细介绍的更多步骤。
+ * 
  * But now you should have a general high-level idea of what most compilers look
  * like.
+ * 但现在您应该对大多数编译器的外观有了大致的了解。  
  *
  * Now that I’ve explained all of this, you’re all good to go write your own
  * compilers right?
+ * 在我解释了这一切之后，您就可以开始编写自己的编译器了吗？  
  *
  * Just kidding, that's what I'm here to help with :P
+ * 开玩笑啦，我就是来帮忙的 :P  
  *
  * So let's begin...
  */
@@ -447,21 +453,31 @@
  * ============================================================================
  *                                   (/^▽^)/
  *                                THE TOKENIZER!
+ *                                   分词器！
  * ============================================================================
  */
 
 /**
  * We're gonna start off with our first phase of parsing, lexical analysis, with
  * the tokenizer.
- *
+ * 我们将从解析的第一阶段，即词法分析开始，使用分词器。  
+ * 
  * We're just going to take our string of code and break it down into an array
  * of tokens.
- *
+ * 我们只需要将代码字符串分解成一组令牌（tokens）的数组。
+ * 
  *   (add 2 (subtract 4 2))   =>   [{ type: 'paren', value: '(' }, ...]
+ * 
+ * 这里的例子是一个简单的表达式，分词器会将其分解为多个令牌。  
+ * 每个令牌都有一个类型（type）和一个值（value）。  
+ * 在这个例子中，第一个令牌是一个类型为 'paren' 的左括号 '('。  
+ * 后续令牌将代表 'add', 数字 '2', 'subtract', '4', '2' 等，直到右括号 ')' 为止。  
+ * 这样，我们就得到了一个令牌数组，可以用于后续的语法分析阶段。
  */
 
 // We start by accepting an input string of code, and we're gonna set up two
 // things...
+// 我们开始接受一个输入的代码字符串，并且我们将设置两个东西...
 function tokenizer(input) {
 
   // A `current` variable for tracking our position in the code like a cursor.
